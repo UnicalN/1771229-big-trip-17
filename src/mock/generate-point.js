@@ -7,6 +7,6 @@ export const generatePoint = () =>
       'destination': 'Paris',
       'id': 0,
       'is_favorite': false,
-      'offers': [],
+      'offers': [1,2],
       'type': 'bus'
     });

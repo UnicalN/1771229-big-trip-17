@@ -6,27 +6,30 @@ import PointListView from '../view/point-list-view.js';
 import PointView from '../view/point-view.js';
 import SortView from '../view/sort-view.js';
 
+import OffersModel from '../model/offers-model.js';
 
 export default class PointListPresenter {
   editPointComponent = new EditPointView();
   pointListComponent = new PointListView();
   pointsModel = new PointsModel();
+
+  offersModel = new OffersModel();
+
   init = (pointListContainer) => {
     this.pointListContainer = pointListContainer;
     this.pointsList = [...this.pointsModel.getPoints()];
+    //console.log(this.offersModel.getOffers());
+    this.offersList = [...this.offersModel.getOffers()];
 
     render(new SortView(), this.pointListContainer);
     render(this.pointListComponent, this.pointListContainer); // this. вместо new тк объявлено ранее для повторяющихся элементов
     render(new EditPointView(), this.pointListComponent.getElement());
     render(new NewPointView(), this.pointListComponent.getElement());
 
-    //render(, this.pointListComponent.getElement());
-
-    //render;
 
     for (let i = 0; i < 3; i++) {
-      //console.log(this.pointsList[i]);
-      render(new PointView(this.pointsList[i]), this.pointListComponent.getElement());
+      console.log(this.pointsList[i], this.offersList);
+      render(new PointView(this.pointsList[i], this.offersList), this.pointListComponent.getElement()); //render(что, где)
     }
   };
 }

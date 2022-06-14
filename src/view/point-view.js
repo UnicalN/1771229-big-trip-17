@@ -3,7 +3,7 @@ import {createElement} from '../render.js';
 
 
 const getOffersOfType = (offersByType, pointType) => {
-  for (const offersOfType of offersByType){
+  for (const offersOfType in offersByType){
     if (offersOfType.type === pointType)
     {return offersOfType.offers;}
   }
@@ -23,42 +23,23 @@ const createOfferListItem = (offer) => {
 
 const createOffersOfPointList = (offersOfType, offersOfPoint) => {
   let offersOfPointList ='';
-  for (const offerOfType of offersOfType) {
+  for (const offerOfType in offersOfType) {
     for (const offerOfPoint of offersOfPoint) {
       if (offerOfType.id === offerOfPoint) {
         offersOfPointList = `${offersOfPointList}${createOfferListItem(offerOfType)}`;
-
       }
     }
   }
 };
 
 
-/*const getOffersByType = (pointOffers, pointType, offersByType) =>
-{
-let offersListElement = '';
-  for (const offer of offers){
-
-    offersListElement=`${offersListElement}
-    <li class="event__offer">
-<span class="event__offer-title">${'offerTitle'}</span>
-&plus;&euro;&nbsp;
-<span class="event__offer-price">${'offerPrice'}</span>
-</li>
-    `
-  }
-};
-*/
-const createPointTemplate = (point) => {
+const createPointTemplate = (point, offersByType) => {
   //const point = {basePrice: 100, dateFrom: '2019-03-18T10:30', dateTo: '2019-03-18T11:00', destination: 'Paris', id: 1, isFavorite: true, offers: [], type: 'taxi'};
   // eslint-disable-next-line no-unused-vars
   const {base_price: basePrice, date_from: dateFrom, date_to: dateTo, destination, id, is_favorite:isFavorite, offers, type} = point;
-  //console.log(point);
-  //console.log(basePrice, dateFrom, dateTo, destination, id, isFavorite, offers, type);
-
-
   const favoriteClass = isFavorite ? 'event__favorite-btn--active' : '';
-  //createOffersOfPointList(getOffersOfType(offersByType, type), offers);
+  console.log(point, offersByType);
+  createOffersOfPointList(getOffersOfType(offersByType, type), offers);
 
   return(`
 <li class="trip-events__item">
