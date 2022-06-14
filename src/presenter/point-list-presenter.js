@@ -25,6 +25,7 @@ export default class PointListPresenter {
     //render;
 
     for (let i = 0; i < 3; i++) {
+      //console.log(this.pointsList[i]);
       render(new PointView(this.pointsList[i]), this.pointListComponent.getElement());
     }
   };
