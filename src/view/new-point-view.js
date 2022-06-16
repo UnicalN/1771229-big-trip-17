@@ -1,13 +1,62 @@
-import {createElement} from '../render.js';
 
-const createNewPointTemplate = () => `
+import {createElement} from '../render.js';
+import { getTimeFromIso, getDurationFromIso, getDateFromIso } from '../dayjs-custom.js';
+
+const getOffersOfType = (offersByType, pointType) => {
+  for (const offersOfType of offersByType){
+    if (offersOfType.type === pointType){
+      return offersOfType.offers;
+    }
+  }
+};
+
+const createOfferListItem = (offer) => {
+  const {id ,title, price} = offer;
+  return `
+     <li class="event__offer" id=${id}>
+     <span class="event__offer-title">${title}</span>
+     &plus;&euro;&nbsp;
+     <span class="event__offer-price">${price}</span>
+   </li>
+     `;
+};
+
+const createOffersOfPointList = (offersOfType, offersOfPoint) => {
+
+  let offersOfPointList ='';
+  for (const offerOfType of offersOfType) {
+    for (const offerOfPoint of offersOfPoint) {
+      if (offerOfType.id === offerOfPoint) {
+        offersOfPointList = `${offersOfPointList}${createOfferListItem(offerOfType)}`;
+      }
+    }
+  }
+  return offersOfPointList;
+};
+
+
+const createPointTemplate = (point, offersByType) => {
+  //const point = {basePrice: 100, dateFrom: '2019-03-18T10:30', dateTo: '2019-03-18T11:00', destination: 'Paris', id: 1, isFavorite: true, offers: [], type: 'taxi'};
+  // eslint-disable-next-line no-unused-vars
+  const {base_price: basePrice, date_from: dateFrom, date_to: dateTo, destination, id, is_favorite:isFavorite, offers, type} = point;
+  const favoriteClass = isFavorite ? 'event__favorite-btn--active' : '';
+  const timeFrom = getTimeFromIso(dateFrom);
+  const timeTo = getTimeFromIso(dateTo);
+  const offersOfType = getOffersOfType(offersByType, type);
+  const offersList = createOffersOfPointList(offersOfType, offers);
+  const duration = getDurationFromIso(dateFrom, dateTo);
+  //console.log('offersList:',offersList);
+
+  console.log (duration);
+
+  return (`
 <li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
                     <label class="event__type  event__type-btn" for="event-type-toggle-1">
                       <span class="visually-hidden">Choose event type</span>
-                      <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
+                      <img class="event__type-icon" width="17" height="17" src="img/icons/$.png" alt="Event type icon">
                     </label>
                     <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -163,7 +212,8 @@ const createNewPointTemplate = () => `
                 </section>
               </form>
             </li>
-`;
+`);
+};
 
 export default class NewPointView {
   getTemplate(){

@@ -1,19 +1,19 @@
 
 import {createElement} from '../render.js';
-
+import { getTimeFromIso, getDurationFromIso, getDateFromIso } from '../dayjs-custom.js';
 
 const getOffersOfType = (offersByType, pointType) => {
-  for (const offersOfType in offersByType){
-    if (offersOfType.type === pointType)
-    {return offersOfType.offers;}
+  for (const offersOfType of offersByType){
+    if (offersOfType.type === pointType){
+      return offersOfType.offers;
+    }
   }
 };
 
 const createOfferListItem = (offer) => {
-  // eslint-disable-next-line no-unused-vars
   const {id ,title, price} = offer;
   return `
-     <li class="event__offer">
+     <li class="event__offer" id=${id}>
      <span class="event__offer-title">${title}</span>
      &plus;&euro;&nbsp;
      <span class="event__offer-price">${price}</span>
@@ -22,14 +22,16 @@ const createOfferListItem = (offer) => {
 };
 
 const createOffersOfPointList = (offersOfType, offersOfPoint) => {
+
   let offersOfPointList ='';
-  for (const offerOfType in offersOfType) {
+  for (const offerOfType of offersOfType) {
     for (const offerOfPoint of offersOfPoint) {
       if (offerOfType.id === offerOfPoint) {
         offersOfPointList = `${offersOfPointList}${createOfferListItem(offerOfType)}`;
       }
     }
   }
+  return offersOfPointList;
 };
 
 
@@ -38,24 +40,30 @@ const createPointTemplate = (point, offersByType) => {
   // eslint-disable-next-line no-unused-vars
   const {base_price: basePrice, date_from: dateFrom, date_to: dateTo, destination, id, is_favorite:isFavorite, offers, type} = point;
   const favoriteClass = isFavorite ? 'event__favorite-btn--active' : '';
-  console.log(point, offersByType);
-  createOffersOfPointList(getOffersOfType(offersByType, type), offers);
+  const timeFrom = getTimeFromIso(dateFrom);
+  const timeTo = getTimeFromIso(dateTo);
+  const offersOfType = getOffersOfType(offersByType, type);
+  const offersList = createOffersOfPointList(offersOfType, offers);
+  const duration = getDurationFromIso(dateFrom, dateTo);
+  //console.log('offersList:',offersList);
+
+  console.log (duration);
 
   return(`
 <li class="trip-events__item">
 <div class="event">
-  <time class="event__date" datetime=datetime="${'date'}date">${'humanizedDate'}</time>
+  <time class="event__date" datetime=datetime="${dateFrom}date">${getDateFromIso(dateFrom)}</time>
   <div class="event__type">
     <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="${type} icon">
   </div>
   <h3 class="event__title">${type} ${destination}</h3>
   <div class="event__schedule">
     <p class="event__time">
-      <time class="event__start-time" datetime="${dateFrom}">${'HumanizedDateFrom'}</time>
+      <time class="event__start-time" datetime="${dateFrom}">${timeFrom}</time>
       &mdash;
-      <time class="event__end-time" datetime="${dateTo}">${'humanizedDateTo'}</time>
+      <time class="event__end-time" datetime="${dateTo}">${timeTo}</time>
     </p>
-    <p class="event__duration">${'duration'}M</p>
+    <p class="event__duration">${duration}</p>
   </div>
   <p class="event__price">
     &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
@@ -64,12 +72,7 @@ const createPointTemplate = (point, offersByType) => {
   <ul class="event__selected-offers">
 
 
-  ${'offersList'}
-    <li class="event__offer">
-      <span class="event__offer-title">${'offerTitle'}</span>
-      &plus;&euro;&nbsp;
-      <span class="event__offer-price">20</span>
-    </li>
+  ${offersList}
 
 
 
@@ -99,8 +102,6 @@ export default class PointView {
 
   getElement() {
     if (!this.element) {
-      //console.log('жмых');
-      //console.log(this.point);
       this.element = createElement(this.getTemplate(this.point, this.offers));
 
 

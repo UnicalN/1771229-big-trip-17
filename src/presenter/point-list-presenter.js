@@ -28,7 +28,6 @@ export default class PointListPresenter {
 
 
     for (let i = 0; i < 3; i++) {
-      console.log(this.pointsList[i], this.offersList);
       render(new PointView(this.pointsList[i], this.offersList), this.pointListComponent.getElement()); //render(что, где)
     }
   };
