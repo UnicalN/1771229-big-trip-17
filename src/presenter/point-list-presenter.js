@@ -23,7 +23,8 @@ export default class PointListPresenter {
 
     render(new SortView(), this.pointListContainer);
     render(this.pointListComponent, this.pointListContainer); // this. вместо new тк объявлено ранее для повторяющихся элементов
-    render(new EditPointView(), this.pointListComponent.getElement());
+    //console.log('pre-render editPointView', this.pointsList, this.offersList);
+    render(new EditPointView(this.pointsList[0], this.offersList), this.pointListComponent.getElement());
     render(new NewPointView(), this.pointListComponent.getElement());
 
 

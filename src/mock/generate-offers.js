@@ -7,7 +7,7 @@ export const offers =
           {
             'id': 1,
             'title': 'Upgrade to a business class',
-            'price': 120
+            'price': 123
           },
           {
             'id': 2,
@@ -22,7 +22,7 @@ export const offers =
           {
             'id': 4,
             'title': 'Upgrade to a business class',
-            'price': 120
+            'price': 123
           },
         ]
       }),
@@ -33,7 +33,7 @@ export const offers =
           {
             'id': 1,
             'title': 'Upgrade to a business class',
-            'price': 120
+            'price': 123
           },
           {
             'id': 2,

@@ -36,18 +36,13 @@ const createOffersOfPointList = (offersOfType, offersOfPoint) => {
 
 
 const createPointTemplate = (point, offersByType) => {
-  //const point = {basePrice: 100, dateFrom: '2019-03-18T10:30', dateTo: '2019-03-18T11:00', destination: 'Paris', id: 1, isFavorite: true, offers: [], type: 'taxi'};
-  // eslint-disable-next-line no-unused-vars
-  const {base_price: basePrice, date_from: dateFrom, date_to: dateTo, destination, id, is_favorite:isFavorite, offers, type} = point;
+  const {base_price: basePrice, date_from: dateFrom, date_to: dateTo, destination, is_favorite:isFavorite, offers, type} = point;
   const favoriteClass = isFavorite ? 'event__favorite-btn--active' : '';
   const timeFrom = getTimeFromIso(dateFrom);
   const timeTo = getTimeFromIso(dateTo);
   const offersOfType = getOffersOfType(offersByType, type);
   const offersList = createOffersOfPointList(offersOfType, offers);
   const duration = getDurationFromIso(dateFrom, dateTo);
-  //console.log('offersList:',offersList);
-
-  console.log (duration);
 
   return(`
 <li class="trip-events__item">
@@ -56,7 +51,7 @@ const createPointTemplate = (point, offersByType) => {
   <div class="event__type">
     <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="${type} icon">
   </div>
-  <h3 class="event__title">${type} ${destination}</h3>
+  <h3 class="event__title">${type} ${destination.name}</h3>
   <div class="event__schedule">
     <p class="event__time">
       <time class="event__start-time" datetime="${dateFrom}">${timeFrom}</time>
@@ -102,9 +97,8 @@ export default class PointView {
 
   getElement() {
     if (!this.element) {
+
       this.element = createElement(this.getTemplate(this.point, this.offers));
-
-
     }
 
     return this.element;

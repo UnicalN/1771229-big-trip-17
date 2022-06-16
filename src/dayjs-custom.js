@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 export const getTimeFromIso = (isoDate) => dayjs(isoDate).format('HH:mm');
 export const getDateFromIso = (isoDate) => dayjs(isoDate).format('MMM DD');
-
+export const getEditableDateFromIso = (isoDate) => dayjs(isoDate).format('DD/MM/YY');
 export const getDurationFromIso = (start, finish) => {
   const duration = {
     minutes:  (dayjs(finish).diff(dayjs(start), 'm')) % 60,
