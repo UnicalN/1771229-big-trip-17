@@ -1,5 +1,4 @@
-export const generatePoint = () =>
-  (
+const point =
     {
       'base_price': 1100,
       'date_from': '2019-07-10T22:55:56.845Z',
@@ -19,4 +18,6 @@ export const generatePoint = () =>
       'is_favorite': false,
       'offers': [1,2],
       'type': 'bus'
-    });
+    };
+
+export const generatePoint = () => point;

@@ -1,4 +1,4 @@
-export const offers =
+const offers =
   [
     (
       {
@@ -106,3 +106,5 @@ export const offers =
       }),
 
   ];
+
+export const generateOffers = () => offers;

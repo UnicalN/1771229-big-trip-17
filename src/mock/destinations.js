@@ -1,4 +1,4 @@
-export const destinations = [
+const destinations = [
   {
     'description': 'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
     'name': 'Paris',
@@ -40,3 +40,5 @@ export const destinations = [
     ]
   }
 ];
+
+export const getDestinations = () => destinations;

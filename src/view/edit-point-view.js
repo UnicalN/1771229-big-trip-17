@@ -60,7 +60,7 @@ const createEditPointTemplate = (point, offersByType) => {
   const {base_price: basePrice, date_from: dateFrom, date_to: dateTo, destination, offers, type} = point;
   const offersOfType = getOffersOfType(offersByType, type);
 
-
+  console.log(destination);
   return (`<li class="trip-events__item">
 <form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -147,6 +147,7 @@ export default class EditPointView {
   }
 
   getTemplate(){
+    console.log(this.point.destination);
     return createEditPointTemplate(this.point, this.offers);
   }
 
