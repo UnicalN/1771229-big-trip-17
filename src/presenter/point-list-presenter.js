@@ -21,7 +21,7 @@ export default class PointListPresenter {
     this.offersList = [...this.#offersModel.offers];
 
 
-    console.log(this.pointsList);
+    //console.log(this.pointsList);
 
     render(new SortView(), this.pointListContainer);
     render(this.#pointListComponent, this.pointListContainer); // this. вместо new тк объявлено ранее для повторяющихся элементов
