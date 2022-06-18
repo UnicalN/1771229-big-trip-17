@@ -13,25 +13,27 @@ export default class PointListPresenter {
   #pointsModel = new PointsModel();
 
   #offersModel = new OffersModel();
-
+  #pointListContainer;
+  #pointsList;
+  #offersList;
   init = (pointListContainer) => {
-    this.pointListContainer = pointListContainer;
-    this.pointsList = [...this.#pointsModel.points];
+    this.#pointListContainer = pointListContainer;
+    this.#pointsList = [...this.#pointsModel.points];
     //console.log(this.offersModel.getOffers());
-    this.offersList = [...this.#offersModel.offers];
+    this.#offersList = [...this.#offersModel.offers];
 
 
     //console.log(this.pointsList);
 
-    render(new SortView(), this.pointListContainer);
-    render(this.#pointListComponent, this.pointListContainer); // this. вместо new тк объявлено ранее для повторяющихся элементов
+    render(new SortView(), this.#pointListContainer);
+    render(this.#pointListComponent, this.#pointListContainer); // this. вместо new тк объявлено ранее для повторяющихся элементов
     //console.log('pre-render editPointView', this.pointsList, this.offersList);
-    render(new EditPointView(this.pointsList[0], this.offersList), this.#pointListComponent.getElement());
+    render(new EditPointView(this.#pointsList[0], this.#offersList), this.#pointListComponent.getElement());
     render(new NewPointView(), this.#pointListComponent.getElement());
 
 
     for (let i = 0; i < 3; i++) {
-      render(new PointView(this.pointsList[i], this.offersList), this.#pointListComponent.getElement()); //render(что, где)
+      render(new PointView(this.#pointsList[i], this.#offersList), this.#pointListComponent.getElement()); //render(что, где)
     }
   };
 }
