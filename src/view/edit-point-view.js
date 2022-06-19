@@ -152,7 +152,7 @@ export default class EditPointView {
   }
 
   #element = null;
-  getElement() {
+  get element() {
     if (!this.#element) {
       //console.log('point view class', this.point, this.offers);
       this.#element = createElement(this.template);
