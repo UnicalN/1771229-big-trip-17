@@ -21,6 +21,7 @@ export default class PointListPresenter {
   #offersModel = new OffersModel();
   #destinationsModel = new DestinationsModel();
 
+  #renderPoint = (point) => render(new PointView(point, this.#offersList), this.#pointListComponent.getElement()); //render(что, где)
   init = (pointListContainer) => {
     this.#pointListContainer = pointListContainer;
     this.#pointsList = [...this.#pointsModel.points];
@@ -37,7 +38,8 @@ export default class PointListPresenter {
 
 
     for (let i = 0; i < this.#pointsList.length; i++) {
-      render(new PointView(this.#pointsList[i], this.#offersList), this.#pointListComponent.getElement()); //render(что, где)
+      this.#renderPoint(this.#pointsList[i]);
     }
   };
 }
+
