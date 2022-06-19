@@ -1,6 +1,6 @@
 import {
   getDestinations
-} from '../mock/destinations,js';
+} from '../mock/destinations.js';
 
 export default class DestinationsModel {
 

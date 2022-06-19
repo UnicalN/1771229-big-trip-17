@@ -7,23 +7,27 @@ import PointView from '../view/point-view.js';
 import SortView from '../view/sort-view.js';
 
 import OffersModel from '../model/offers-model.js';
+import DestinationsModel from '../model/destinations-model.js';
 
 export default class PointListPresenter {
   #pointListComponent = new PointListView();
-  #pointsModel = new PointsModel();
 
+  #pointListContainer = null;
+  #pointsList= null;
+  #offersList= null;
+  #destinations = null;
+
+  #pointsModel = new PointsModel();
   #offersModel = new OffersModel();
-  #pointListContainer;
-  #pointsList;
-  #offersList;
+  #destinationsModel = new DestinationsModel();
+
   init = (pointListContainer) => {
     this.#pointListContainer = pointListContainer;
     this.#pointsList = [...this.#pointsModel.points];
-    //console.log(this.offersModel.getOffers());
     this.#offersList = [...this.#offersModel.offers];
 
+    this.#destinations = [...this.#destinationsModel.destinations];
 
-    //console.log(this.pointsList);
 
     render(new SortView(), this.#pointListContainer);
     render(this.#pointListComponent, this.#pointListContainer); // this. вместо new тк объявлено ранее для повторяющихся элементов
@@ -32,7 +36,7 @@ export default class PointListPresenter {
     render(new NewPointView(), this.#pointListComponent.getElement());
 
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < this.#pointsList.length; i++) {
       render(new PointView(this.#pointsList[i], this.#offersList), this.#pointListComponent.getElement()); //render(что, где)
     }
   };
