@@ -21,7 +21,12 @@ export default class PointListPresenter {
   #offersModel = new OffersModel();
   #destinationsModel = new DestinationsModel();
 
-  #renderPoint = (point) => render(new PointView(point, this.#offersList), this.#pointListComponent.getElement()); //render(что, где)
+  #renderPoint = (point) => {
+    render(new PointView(point, this.#offersList), this.#pointListComponent.getElement()); //render(что, где)
+
+
+  };
+
   init = (pointListContainer) => {
     this.#pointListContainer = pointListContainer;
     this.#pointsList = [...this.#pointsModel.points];
