@@ -150,18 +150,19 @@ export default class EditPointView {
     //console.log(this.point.destination);
     return createEditPointTemplate(this.point, this.offers);
   }
-#element = null;
+
+  #element = null;
   getElement() {
-    if (!this.element) {
+    if (!this.#element) {
       //console.log('point view class', this.point, this.offers);
-      this.element = createElement(this.template);
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 
   get template(){
