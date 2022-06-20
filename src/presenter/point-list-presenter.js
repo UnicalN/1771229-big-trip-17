@@ -5,6 +5,7 @@ import NewPointView from '../view/new-point-view.js';
 import PointListView from '../view/point-list-view.js';
 import PointView from '../view/point-view.js';
 import SortView from '../view/sort-view.js';
+import NoPointsView from '../view/no-points-view.js';
 
 import OffersModel from '../model/offers-model.js';
 import DestinationsModel from '../model/destinations-model.js';
@@ -76,6 +77,9 @@ export default class PointListPresenter {
     render(new EditPointView(this.#pointsList[0], this.#offersList), this.#pointListComponent.getElement());
     render(new NewPointView(), this.#pointListComponent.getElement());
 
+    if (this.#pointsList.length === 0) {
+      render(new NoPointsView(), this.#pointListComponent.getElement());
+    }
 
     for (let i = 0; i < this.#pointsList.length; i++) {
       this.#renderPoint(this.#pointsList[i]);
