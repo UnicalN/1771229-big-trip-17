@@ -90,9 +90,11 @@ export default class PointListPresenter {
       render(new NoPointsView(), this.#pointListComponent.element);
     }
 
-    for (let i = 0; i < this.#pointsList.length; i++) {
-      this.#renderPoint(this.#pointsList[i]);
-    }
+
+    this.#pointsList.forEach((point) => {
+      this.#renderPoint(point);
+    });
+
   };
 }
 
