@@ -28,6 +28,7 @@ export default class PointListPresenter {
 
     const replaceStandardWithEdit = () => {
       this.#pointListComponent.element.replaceChild(editPointComponent.element, pointComponent.element);
+      // eslint-disable-next-line no-use-before-define
       document.addEventListener('keydown', onEscKeyDown);
     };
     const replaceEditWithStandard = () => {
