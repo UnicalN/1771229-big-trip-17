@@ -20,13 +20,48 @@ export default class PointListPresenter {
   #pointsModel = new PointsModel();
   #offersModel = new OffersModel();
   #destinationsModel = new DestinationsModel();
-
+  //-----------------------------------------------replace point
   #renderPoint = (point) => {
-    render(new PointView(point, this.#offersList), this.#pointListComponent.getElement()); //render(что, где)
+    //render(new PointView(point, ), this.#pointListComponent.getElement()); //render(что, где)
+    const pointComponent = new PointView(point, this.#offersList);
+    const editPointComponent = new EditPointView(point, this.#offersList);
+
+    const replaceStandardWithEdit = () => {
+      this.#pointListComponent.element.replaceChild(editPointComponent.element, pointComponent.element);
+    };
+    const replaceEditWithStandard = () => {
+      this.#pointListComponent.element.replaceChild(pointComponent.element, editPointComponent.element);
+    };
 
 
+    pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      replaceStandardWithEdit();
+    });
+
+    editPointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      replaceEditWithStandard();
+      document.addEventListener('keydown', onEscKeyDown);
+    });
+
+    editPointComponent.element.querySelector('.event__save-btn').addEventListener('submit', (evt) => {
+      evt.preventDefault();
+      replaceEditWithStandard();
+
+
+    });
+
+    //document.addEventListener('keydown', onEscKeyDown);
+    const onEscKeyDown =  (evt) => {
+      if (evt.key === 'Escape') {
+        evt.preventDefault();
+        replaceEditWithStandard();
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
+    render(pointComponent, this.#pointListComponent.getElement());
   };
 
+  //-----------------------------------------------------------------------------------
   init = (pointListContainer) => {
     this.#pointListContainer = pointListContainer;
     this.#pointsList = [...this.#pointsModel.points];
