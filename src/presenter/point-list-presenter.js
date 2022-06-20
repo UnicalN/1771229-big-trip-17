@@ -28,6 +28,7 @@ export default class PointListPresenter {
 
     const replaceStandardWithEdit = () => {
       this.#pointListComponent.element.replaceChild(editPointComponent.element, pointComponent.element);
+      document.addEventListener('keydown', onEscKeyDown);
     };
     const replaceEditWithStandard = () => {
       this.#pointListComponent.element.replaceChild(pointComponent.element, editPointComponent.element);
@@ -40,14 +41,12 @@ export default class PointListPresenter {
 
     editPointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
       replaceEditWithStandard();
-      document.addEventListener('keydown', onEscKeyDown);
+
     });
 
-    editPointComponent.element.querySelector('.event__save-btn').addEventListener('submit', (evt) => {
+    editPointComponent.element.querySelector('form').addEventListener('submit', (evt) => {
       evt.preventDefault();
       replaceEditWithStandard();
-
-
     });
 
     //document.addEventListener('keydown', onEscKeyDown);
