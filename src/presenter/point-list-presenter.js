@@ -36,6 +36,9 @@ export default class PointListPresenter {
       this.#pointListComponent.element.replaceChild(pointComponent.element, editPointComponent.element);
     };
 
+    const removeEditPoint = () => {
+      this.#pointListComponent.element.removeChild(editPointComponent.element);
+    };
 
     pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
       replaceStandardWithEdit();
@@ -50,6 +53,12 @@ export default class PointListPresenter {
       evt.preventDefault();
       replaceEditWithStandard();
     });
+
+    editPointComponent.element.querySelector('form').addEventListener('reset', (evt) => {
+      evt.preventDefault();
+      removeEditPoint();
+    });
+
 
     //document.addEventListener('keydown', onEscKeyDown);
     const onEscKeyDown =  (evt) => {
