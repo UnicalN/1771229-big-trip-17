@@ -68,7 +68,7 @@ export default class PointListPresenter {
         document.removeEventListener('keydown', onEscKeyDown);
       }
     };
-    render(pointComponent, this.#pointListComponent.getElement());
+    render(pointComponent, this.#pointListComponent.element);
   };
 
   //-----------------------------------------------------------------------------------
@@ -83,11 +83,11 @@ export default class PointListPresenter {
     render(new SortView(), this.#pointListContainer);
     render(this.#pointListComponent, this.#pointListContainer); // this. вместо new тк объявлено ранее для повторяющихся элементов
     //console.log('pre-render editPointView', this.pointsList, this.offersList);
-    render(new EditPointView(this.#pointsList[0], this.#offersList), this.#pointListComponent.getElement());
-    render(new NewPointView(), this.#pointListComponent.getElement());
+    render(new EditPointView(this.#pointsList[0], this.#offersList), this.#pointListComponent.element);
+    render(new NewPointView(), this.#pointListComponent.element);
 
     if (this.#pointsList.length === 0) {
-      render(new NoPointsView(), this.#pointListComponent.getElement());
+      render(new NoPointsView(), this.#pointListComponent.element);
     }
 
     for (let i = 0; i < this.#pointsList.length; i++) {
