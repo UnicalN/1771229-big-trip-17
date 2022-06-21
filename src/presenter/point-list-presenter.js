@@ -1,5 +1,5 @@
 import PointsModel from '../model/points-model.js';
-import {render} from '../framework/render.js';
+import {render, replace} from '../framework/render.js';
 import EditPointView from '../view/edit-point-view.js';
 import NewPointView from '../view/new-point-view.js';
 import PointListView from '../view/point-list-view.js';
@@ -21,47 +21,20 @@ export default class PointListPresenter {
   #pointsModel = new PointsModel();
   #offersModel = new OffersModel();
   #destinationsModel = new DestinationsModel();
-  //-----------------------------------------------replace point
+
   #renderPoint = (point) => {
     //render(new PointView(point, ), this.#pointListComponent.getElement()); //render(что, где)
     const pointComponent = new PointView(point, this.#offersList);
     const editPointComponent = new EditPointView(point, this.#offersList);
 
     const replaceStandardWithEdit = () => {
-      this.#pointListComponent.element.replaceChild(editPointComponent.element, pointComponent.element);
+      replace(editPointComponent, pointComponent);
       // eslint-disable-next-line no-use-before-define
       document.addEventListener('keydown', onEscKeyDown);
     };
     const replaceEditWithStandard = () => {
-      this.#pointListComponent.element.replaceChild(pointComponent.element, editPointComponent.element);
+      replace(pointComponent, editPointComponent);
     };
-    /*
-    const removeEditPoint = () => {
-      this.#pointListComponent.element.removeChild(editPointComponent.element);
-    };
-    */
-    //  добавление listener'ов
-    pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
-      replaceStandardWithEdit();
-    });
-
-    editPointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
-      replaceEditWithStandard();
-
-    });
-
-    editPointComponent.element.querySelector('form').addEventListener('submit', (evt) => {
-      evt.preventDefault();
-      replaceEditWithStandard();
-    });
-
-    editPointComponent.element.querySelector('form').addEventListener('reset', (evt) => {
-      evt.preventDefault();
-      replaceEditWithStandard();
-    });
-
-
-    //document.addEventListener('keydown', onEscKeyDown);
     const onEscKeyDown =  (evt) => {
       if (evt.key === 'Escape') {
         evt.preventDefault();
@@ -69,10 +42,28 @@ export default class PointListPresenter {
         document.removeEventListener('keydown', onEscKeyDown);
       }
     };
+    //  добавление listener'ов
+    pointComponent.setRollupButtonClickHandler(() => {
+      replaceStandardWithEdit();
+    });
+
+    editPointComponent.setRollupButtonClickHandler(() => {
+      replaceEditWithStandard();
+    });
+
+    editPointComponent.setFormSubmitHandler(() => {
+      replaceEditWithStandard();
+    });
+
+    editPointComponent.setFormResetHandler(() => {
+      replaceEditWithStandard();
+    });
+
+
     render(pointComponent, this.#pointListComponent.element);
   };
 
-  //-----------------------------------------------------------------------------------
+
   init = (pointListContainer) => {
     this.#pointListContainer = pointListContainer;
     this.#pointsList = [...this.#pointsModel.points];
@@ -84,7 +75,7 @@ export default class PointListPresenter {
     render(new SortView(), this.#pointListContainer);
     render(this.#pointListComponent, this.#pointListContainer); // this. вместо new тк объявлено ранее для повторяющихся элементов
     //console.log('pre-render editPointView', this.pointsList, this.offersList);
-    render(new EditPointView(this.#pointsList[0], this.#offersList), this.#pointListComponent.element);
+    //render(new EditPointView(this.#pointsList[0], this.#offersList), this.#pointListComponent.element);
     render(new NewPointView(), this.#pointListComponent.element);
 
     if (this.#pointsList.length === 0) {
