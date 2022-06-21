@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {typesMap} from '../mock/types-map.js';
 import { getTimeFromIso, getEditableDateFromIso } from '../dayjs-custom.js';
 // add type in call
@@ -140,34 +140,45 @@ const createEditPointTemplate = (point, offersByType) => {
 `);
 };
 
-export default class EditPointView {
+export default class EditPointView extends AbstractView {
   constructor(point, offers){
+    super();
     this.point = point;
     this.offers = offers;
   }
 
-  getTemplate(){
-    //console.log(this.point.destination);
+  get template() {
     return createEditPointTemplate(this.point, this.offers);
   }
 
-  #element = null;
-  get element() {
-    if (!this.#element) {
-      //console.log('point view class', this.point, this.offers);
-      this.#element = createElement(this.template);
-    }
+  setRollupButtonClickHandler = (callback) =>{
+    this._callback.click = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#rollupButtonClickHandler);
+  };
 
-    return this.#element;
-  }
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+  };
 
-  removeElement() {
-    this.#element = null;
-  }
+  setFormResetHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.querySelector('form').addEventListener('reset', this.#formResetHandler);
+  };
 
-  get template(){
-    //console.log(this.point.destination);
-    return createEditPointTemplate(this.point, this.offers);
-  }
+  #rollupButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  };
+
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  };
+
+  #formResetHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  };
 }
-
