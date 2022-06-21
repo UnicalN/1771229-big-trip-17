@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstarctView from '../framework/view/abstract-view.js';
 import {typesMap} from '../mock/types-map.js';
 import { getTimeFromIso, getEditableDateFromIso } from '../dayjs-custom.js';
 // add type in call
@@ -140,34 +140,14 @@ const createEditPointTemplate = (point, offersByType) => {
 `);
 };
 
-export default class EditPointView {
+export default class EditPointView extends AbstractView {
   constructor(point, offers){
+    super();
     this.point = point;
     this.offers = offers;
   }
 
-  getTemplate(){
-    //console.log(this.point.destination);
-    return createEditPointTemplate(this.point, this.offers);
-  }
-
-  #element = null;
-  get element() {
-    if (!this.#element) {
-      //console.log('point view class', this.point, this.offers);
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
-  }
-
-  get template(){
-    //console.log(this.point.destination);
+  get template() {
     return createEditPointTemplate(this.point, this.offers);
   }
 }
-

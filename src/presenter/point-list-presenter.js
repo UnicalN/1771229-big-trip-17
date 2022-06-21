@@ -1,5 +1,5 @@
 import PointsModel from '../model/points-model.js';
-import {render} from '../render.js';
+import {render} from '../framework/render.js';
 import EditPointView from '../view/edit-point-view.js';
 import NewPointView from '../view/new-point-view.js';
 import PointListView from '../view/point-list-view.js';
@@ -35,11 +35,12 @@ export default class PointListPresenter {
     const replaceEditWithStandard = () => {
       this.#pointListComponent.element.replaceChild(pointComponent.element, editPointComponent.element);
     };
-
+    /*
     const removeEditPoint = () => {
       this.#pointListComponent.element.removeChild(editPointComponent.element);
     };
-
+    */
+    //  добавление listener'ов
     pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
       replaceStandardWithEdit();
     });
@@ -56,7 +57,7 @@ export default class PointListPresenter {
 
     editPointComponent.element.querySelector('form').addEventListener('reset', (evt) => {
       evt.preventDefault();
-      removeEditPoint();
+      replaceEditWithStandard();
     });
 
 
