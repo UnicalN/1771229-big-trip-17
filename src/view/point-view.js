@@ -47,7 +47,7 @@ const createPointTemplate = (point, offersByType) => {
   return(`
 <li class="trip-events__item">
 <div class="event">
-  <time class="event__date" datetime=datetime="${dateFrom}date">${getDateFromIso(dateFrom)}</time>
+  <time class="event__date" datetime="${dateFrom}date">${getDateFromIso(dateFrom)}</time>
   <div class="event__type">
     <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="${type} icon">
   </div>
