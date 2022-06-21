@@ -1,5 +1,4 @@
-
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { getTimeFromIso, getDurationFromIso, getDateFromIso } from '../dayjs-custom.js';
 
 const getOffersOfType = (offersByType, pointType) => {
@@ -85,28 +84,25 @@ const createPointTemplate = (point, offersByType) => {
 </li>
 `);};
 
-export default class PointView {
+export default class PointView extends AbstractView {
+
   constructor(point, offers){
+    super();
     this.point = point;
     this.offers = offers;
   }
 
-  #element = null;
-
-  get template(){
+  get template() {
     return createPointTemplate(this.point, this.offers);
   }
 
-  get element() {
-    if (!this.#element) {
+  setRollupButtonClickHandler = (callback) =>{
+    this._callback.click = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#rollupButtonClickHandler);
+  };
 
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
-  }
+  #rollupButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  };
 }
