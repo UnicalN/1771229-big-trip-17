@@ -1,4 +1,4 @@
-import AbstarctView from '../framework/view/abstract-view.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { getTimeFromIso, getDurationFromIso, getDateFromIso } from '../dayjs-custom.js';
 
 const getOffersOfType = (offersByType, pointType) => {

@@ -1,4 +1,4 @@
-import AbstarctView from '../framework/view/abstract-view.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {typesMap} from '../mock/types-map.js';
 import { getTimeFromIso, getEditableDateFromIso } from '../dayjs-custom.js';
 // add type in call

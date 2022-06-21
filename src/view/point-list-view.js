@@ -1,4 +1,4 @@
-import AbstarctView from '../framework/view/abstract-view.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const createPointListTemplate = () => '<ul class="trip-events__list"></ul>';
 
