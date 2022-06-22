@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid';
+
 const point =
     {
       'base_price': 1100,
@@ -14,7 +16,7 @@ const point =
           }
         ]
       },
-      'id': 0,
+      'id': nanoid(),
       'is_favorite': false,
       'offers': [1,2],
       'type': 'bus'

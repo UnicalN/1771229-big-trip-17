@@ -8,6 +8,7 @@ import NoPointsView from '../view/no-points-view.js';
 //import OffersModel from '../model/offers-model.js';
 //import DestinationsModel from '../model/destinations-model.js';
 import PointPresenter from './point-presenter.js';
+import { updateItem } from '../update-item.js';
 
 export default class PointListPresenter {
 
@@ -20,11 +21,18 @@ export default class PointListPresenter {
   #pointsModel = new PointsModel();
   //#offersModel = new OffersModel();
   //#destinationsModel = new DestinationsModel();
+  #pointPresenter = new Map();
 
   #renderPoint = (point) => {
 
     const pointPresenter = new PointPresenter(this.#pointListComponent.element);
     pointPresenter.init(point);
+    this.#pointPresenter.set(point.id, pointPresenter);
+  };
+
+  #clearTaskList = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.destroy());
+    this.#pointPresenter.clear();
   };
 
   #renderSort = () => {
@@ -67,6 +75,11 @@ export default class PointListPresenter {
     this.#renderNewPoint();
     this.#renderAllPoints();
 
+  };
+
+  #handleTaskChange = (updatedPoint) => {
+    this.#pointsList = updateItem(this.#pointsList, updatedPoint);
+    this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
   };
 }
 

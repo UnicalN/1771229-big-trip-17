@@ -14,7 +14,6 @@ export default class PointPresenter {
   #pointListContainer = null;
   #offersList = null;
   #offersModel = new OffersModel();
-
   constructor(pointListComponent){
     this.#pointListComponent = pointListComponent;
   }
