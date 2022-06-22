@@ -1,5 +1,5 @@
 import PointsModel from '../model/points-model.js';
-import {render, replace, RenderPosition} from '../framework/render.js';
+import {render,  RenderPosition} from '../framework/render.js';
 import NewPointView from '../view/new-point-view.js';
 import PointListView from '../view/point-list-view.js';
 import SortView from '../view/sort-view.js';

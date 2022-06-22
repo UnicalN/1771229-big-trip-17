@@ -1,5 +1,5 @@
 
-import {render, replace} from '../framework/render.js';
+import {render, replace, remove} from '../framework/render.js';
 import PointView from '../view/point-view.js';
 import EditPointView from '../view/edit-point-view.js';
 
@@ -25,6 +25,9 @@ export default class PointPresenter {
     //
     this.#offersList = [...this.#offersModel.offers];
 
+    const prevPointComponent = this.#pointComponent;
+    const prevEditPointComponent = this.#editPointComponent;
+
     this.#pointComponent = new PointView(point, this.#offersList);
     this.#editPointComponent = new EditPointView(point, this.#offersList);
     //
@@ -36,7 +39,31 @@ export default class PointPresenter {
 
     this.#editPointComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#editPointComponent.setFormResetHandler(this.#handleFormReset);
+
+    //переиспользование
+    if (prevPointComponent === null || prevEditPointComponent === null) {
+      render(this.#pointComponent, this.#pointListComponent);
+      return;
+    }
+
+    if (this.#pointListContainer.contains(prevPointComponent.element)) {
+      replace(this.#pointComponent, prevPointComponent);
+    }
+
+    if (this.#pointListContainer.contains(prevEditPointComponent.element)) {
+      replace(this.#editPointComponent, prevEditPointComponent);
+    }
+
+    remove(prevPointComponent);
+    remove(prevEditPointComponent);
+
     render(this.#pointComponent, this.#pointListComponent);
+  };
+
+  destroy = () => {
+    remove(this.#pointComponent);
+    remove(this.#editPointComponent);
+
   };
 
   #replaceStandardWithEdit = () => {
