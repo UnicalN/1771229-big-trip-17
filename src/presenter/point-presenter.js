@@ -15,16 +15,19 @@ export default class PointPresenter {
   #offersModel = new OffersModel();
   #changeData = null;
 
+  #changeMode = null;
+  #isInEditMode = false;
 
-  constructor(pointListComponent, changeData){
+
+  constructor(pointListComponent, changeData, changeMode){
     this.#pointListComponent = pointListComponent;
     this.#changeData = changeData;
+    this.#changeMode = changeMode;
   }
 
 
   init = (point) => {
     this.#point = point;
-    //
     this.#offersList = [...this.#offersModel.offers];
 
     const prevPointComponent = this.#pointComponent;
@@ -32,16 +35,12 @@ export default class PointPresenter {
 
     this.#pointComponent = new PointView(point, this.#offersList);
     this.#editPointComponent = new EditPointView(point, this.#offersList);
-    //
-
-
     this.#pointComponent.setRollupButtonClickHandler(this.#handleRollupButtonClickStandard);
     this.#editPointComponent.setRollupButtonClickHandler(this.#handleRollupButtonClickEdit);
-
     this.#editPointComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#editPointComponent.setFormResetHandler(this.#handleFormReset);
-
     this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+
 
     //переиспользование
     if (prevPointComponent === null || prevEditPointComponent === null) {
@@ -49,11 +48,12 @@ export default class PointPresenter {
       return;
     }
     //console.log('point presenter 51', prevPointComponent.element)
-    if (this.#pointListComponent.contains(prevPointComponent.element)) {
+    if (this.#isInEditMode) {
       replace(this.#pointComponent, prevPointComponent);
     }
 
-    if (this.#pointListComponent.contains(prevEditPointComponent.element)) {
+    if (!this.#isInEditMode) {
+      //console.log(this.#editPointComponent, prevEditPointComponent)
       replace(this.#editPointComponent, prevEditPointComponent);
     }
 
@@ -66,6 +66,12 @@ export default class PointPresenter {
   destroy = () => {
     remove(this.#pointComponent);
     remove(this.#editPointComponent);
+  };
+
+  resetView = () => {
+    if (this.#isInEditMode) {
+      this.#replaceEditWithStandard();
+    }
 
   };
 
@@ -73,10 +79,12 @@ export default class PointPresenter {
     replace(this.#editPointComponent, this.#pointComponent);
     // eslint-disable-next-line no-use-before-define
     document.addEventListener('keydown', this.#onEscKeyDown);
+    this.#isInEditMode = true;
   };
 
   #replaceEditWithStandard = () => {
     replace(this.#pointComponent, this.#editPointComponent);
+    this.#isInEditMode = false;
   };
 
   #onEscKeyDown =  (evt) => {
@@ -96,7 +104,10 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#point, isFavorite: !this.#point.isFavorite});
+    console.log(this.#point.is_favorite, !this.#point.is_Favorite);
+    // eslint-disable-next-line camelcase
+    this.#changeData({...this.#point, is_favorite: !this.#point.is_Favorite});
+    //console.log('favclick');
   };
 
   #handleFormSubmit = (point) => {
