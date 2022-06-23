@@ -10,12 +10,15 @@ export default class PointPresenter {
   #pointComponent = null;
   #editPointComponent = null;
   #point = null;
-
   #pointListContainer = null;
   #offersList = null;
   #offersModel = new OffersModel();
-  constructor(pointListComponent){
+  #changeData = null;
+
+
+  constructor(pointListComponent, changeData){
     this.#pointListComponent = pointListComponent;
+    this.#changeData = changeData;
   }
 
 
@@ -30,7 +33,6 @@ export default class PointPresenter {
     this.#pointComponent = new PointView(point, this.#offersList);
     this.#editPointComponent = new EditPointView(point, this.#offersList);
     //
-    this.#editPointComponent = new EditPointView(point, this.#offersList);
 
 
     this.#pointComponent.setRollupButtonClickHandler(this.#handleRollupButtonClickStandard);
@@ -39,17 +41,19 @@ export default class PointPresenter {
     this.#editPointComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#editPointComponent.setFormResetHandler(this.#handleFormReset);
 
+    this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+
     //переиспользование
     if (prevPointComponent === null || prevEditPointComponent === null) {
       render(this.#pointComponent, this.#pointListComponent);
       return;
     }
-
-    if (this.#pointListContainer.contains(prevPointComponent.element)) {
+    //console.log('point presenter 51', prevPointComponent.element)
+    if (this.#pointListComponent.contains(prevPointComponent.element)) {
       replace(this.#pointComponent, prevPointComponent);
     }
 
-    if (this.#pointListContainer.contains(prevEditPointComponent.element)) {
+    if (this.#pointListComponent.contains(prevEditPointComponent.element)) {
       replace(this.#editPointComponent, prevEditPointComponent);
     }
 
@@ -91,7 +95,12 @@ export default class PointPresenter {
     this.#replaceEditWithStandard();
   };
 
-  #handleFormSubmit = () => {
+  #handleFavoriteClick = () => {
+    this.#changeData({...this.#point, isFavorite: !this.#point.isFavorite});
+  };
+
+  #handleFormSubmit = (point) => {
+    this.#changeData(point);
     this.#replaceEditWithStandard();
   };
 

@@ -25,7 +25,8 @@ export default class PointListPresenter {
 
   #renderPoint = (point) => {
 
-    const pointPresenter = new PointPresenter(this.#pointListComponent.element);
+    const pointPresenter = new PointPresenter(this.#pointListComponent.element, this.#handlePointChange);
+    //console.log ('point list presenter 30', point);
     pointPresenter.init(point);
     this.#pointPresenter.set(point.id, pointPresenter);
   };
@@ -53,6 +54,7 @@ export default class PointListPresenter {
 
   #renderAllPoints = () => {
     this.#pointsList.forEach((point) => {
+      //console.log ('point list presenter 58',point);
       this.#renderPoint(point);
     });
   };
@@ -77,7 +79,7 @@ export default class PointListPresenter {
 
   };
 
-  #handleTaskChange = (updatedPoint) => {
+  #handlePointChange = (updatedPoint) => {
     this.#pointsList = updateItem(this.#pointsList, updatedPoint);
     this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
   };
