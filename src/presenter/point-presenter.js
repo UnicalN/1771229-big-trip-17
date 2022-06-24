@@ -48,13 +48,13 @@ export default class PointPresenter {
       return;
     }
     //console.log('point presenter 51', prevPointComponent.element)
-    if (this.#isInEditMode) {
-      console.log('replace 53', this.#pointComponent, prevPointComponent)
+    if (!this.#isInEditMode) {
+      //console.log('replace 53', this.#pointComponent, prevPointComponent);
       replace(this.#pointComponent, prevPointComponent);
     }
 
-    if (!this.#isInEditMode) {
-      console.log('replace 58', this.#editPointComponent, prevEditPointComponent);
+    if (this.#isInEditMode) {
+      //console.log('replace 58', this.#editPointComponent, prevEditPointComponent);
       replace(this.#editPointComponent, prevEditPointComponent);
     }
 
@@ -77,7 +77,7 @@ export default class PointPresenter {
   };
 
   #replaceStandardWithEdit = () => {
-    console.log('replace 81', this.#editPointComponent, this.#pointComponent)
+    //console.log('replace 81', this.#editPointComponent, this.#pointComponent);
     replace(this.#editPointComponent, this.#pointComponent);
     // eslint-disable-next-line no-use-before-define
     document.addEventListener('keydown', this.#onEscKeyDown);
@@ -108,7 +108,7 @@ export default class PointPresenter {
   #handleFavoriteClick = () => {
     console.log('before', this.#point.is_favorite);
     // eslint-disable-next-line camelcase
-    this.#changeData({...this.#point, is_favorite: !this.#point.is_Favorite});
+    this.#changeData({...this.#point, is_favorite: !this.#point.isFavorite});
     console.log('after', this.#point.is_favorite);
     //console.log('favclick');
   };
