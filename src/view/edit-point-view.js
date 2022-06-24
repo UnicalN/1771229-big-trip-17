@@ -141,14 +141,17 @@ const createEditPointTemplate = (point, offersByType) => {
 };
 
 export default class EditPointView extends AbstractView {
+  #point = null;
+  #offers = null;
   constructor(point, offers){
     super();
-    this.point = point;
-    this.offers = offers;
+    this.#point = point;
+    this.#offers = offers;
   }
 
   get template() {
-    return createEditPointTemplate(this.point, this.offers);
+    //console.log('get template 153', this.#point, this.#offers);
+    return createEditPointTemplate(this.#point, this.#offers);
   }
 
   setRollupButtonClickHandler = (callback) =>{
@@ -174,7 +177,7 @@ export default class EditPointView extends AbstractView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit(this.#point);
   };
 
   #formResetHandler = (evt) => {
@@ -182,3 +185,4 @@ export default class EditPointView extends AbstractView {
     this._callback.formSubmit();
   };
 }
+//

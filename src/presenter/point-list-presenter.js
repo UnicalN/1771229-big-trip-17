@@ -1,92 +1,133 @@
 import PointsModel from '../model/points-model.js';
-import {render, replace} from '../framework/render.js';
-import EditPointView from '../view/edit-point-view.js';
+import {render,  RenderPosition} from '../framework/render.js';
 import NewPointView from '../view/new-point-view.js';
 import PointListView from '../view/point-list-view.js';
-import PointView from '../view/point-view.js';
 import SortView from '../view/sort-view.js';
 import NoPointsView from '../view/no-points-view.js';
 
-import OffersModel from '../model/offers-model.js';
-import DestinationsModel from '../model/destinations-model.js';
+//import OffersModel from '../model/offers-model.js';
+//import DestinationsModel from '../model/destinations-model.js';
+import PointPresenter from './point-presenter.js';
+import { updateItem } from '../update-item.js';
+import {SortType} from '../const.js';
+import { sortByDay, sortByPrice, sortByTime } from '../dayjs-custom.js';
 
 export default class PointListPresenter {
-  #pointListComponent = new PointListView();
 
+  #pointListComponent = new PointListView();
   #pointListContainer = null;
   #pointsList= null;
-  #offersList= null;
-  #destinations = null;
+  //#offersList= null;
+  //#destinations = null;
 
   #pointsModel = new PointsModel();
-  #offersModel = new OffersModel();
-  #destinationsModel = new DestinationsModel();
-
-  #renderPoint = (point) => {
-    //render(new PointView(point, ), this.#pointListComponent.getElement()); //render(что, где)
-    const pointComponent = new PointView(point, this.#offersList);
-    const editPointComponent = new EditPointView(point, this.#offersList);
-
-    const replaceStandardWithEdit = () => {
-      replace(editPointComponent, pointComponent);
-      // eslint-disable-next-line no-use-before-define
-      document.addEventListener('keydown', onEscKeyDown);
-    };
-    const replaceEditWithStandard = () => {
-      replace(pointComponent, editPointComponent);
-    };
-    const onEscKeyDown =  (evt) => {
-      if (evt.key === 'Escape') {
-        evt.preventDefault();
-        replaceEditWithStandard();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-    //  добавление listener'ов
-    pointComponent.setRollupButtonClickHandler(() => {
-      replaceStandardWithEdit();
-    });
-
-    editPointComponent.setRollupButtonClickHandler(() => {
-      replaceEditWithStandard();
-    });
-
-    editPointComponent.setFormSubmitHandler(() => {
-      replaceEditWithStandard();
-    });
-
-    editPointComponent.setFormResetHandler(() => {
-      replaceEditWithStandard();
-    });
-
-
-    render(pointComponent, this.#pointListComponent.element);
+  //#offersModel = new OffersModel();
+  //#destinationsModel = new DestinationsModel();
+  #pointPresenter = new Map();
+  #sortComponent = new SortView();
+  #handleModeChange = () => {
+    //console.log('handleModeChange');
+    this.#pointPresenter.forEach((presenter) => presenter.resetView());
   };
 
+  #renderPoint = (point) => {
+
+    const pointPresenter = new PointPresenter(this.#pointListComponent.element, this.#handlePointChange, this.#handleModeChange);
+    //console.log ('point list presenter 30', point);
+    pointPresenter.init(point);
+    this.#pointPresenter.set(point.id, pointPresenter);
+  };
+
+  #clearPointsList = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.destroy());
+    this.#pointPresenter.clear();
+  };
+
+  #renderSort = () => {
+    render(this.#sortComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
+    this.#sortComponent.setSortChangeHandler(this.#handleSortChange);
+  };
+
+  #renderPointList = () => {
+    render(this.#pointListComponent, this.#pointListContainer);
+  };
+
+  #renderNewPoint = () => {
+    render(new NewPointView(), this.#pointListComponent.element);
+  };
+
+  #renderNoPoints = () => {
+    render(new NoPointsView(), this.#pointListComponent.element);
+  };
+
+  #renderAllPoints = () => {
+    this.#pointsList.forEach((point) => {
+      //console.log ('point list presenter 58',point);
+      this.#renderPoint(point);
+    });
+  };
+
+  #currentSortType = SortType.DEFAULT;
+  #sourcedPointsList = [];
 
   init = (pointListContainer) => {
     this.#pointListContainer = pointListContainer;
     this.#pointsList = [...this.#pointsModel.points];
-    this.#offersList = [...this.#offersModel.offers];
 
-    this.#destinations = [...this.#destinationsModel.destinations];
+    //this.#offersList = [...this.#offersModel.offers];
+    //this.#destinations = [...this.#destinationsModel.destinations];
 
+    this.#renderSort();
 
-    render(new SortView(), this.#pointListContainer);
-    render(this.#pointListComponent, this.#pointListContainer); // this. вместо new тк объявлено ранее для повторяющихся элементов
-    //console.log('pre-render editPointView', this.pointsList, this.offersList);
-    //render(new EditPointView(this.#pointsList[0], this.#offersList), this.#pointListComponent.element);
-    render(new NewPointView(), this.#pointListComponent.element);
+    this.#sourcedPointsList = [...this.#pointsModel.points];
+
+    this.#renderPointList();
+
 
     if (this.#pointsList.length === 0) {
-      render(new NoPointsView(), this.#pointListComponent.element);
+      this.#renderNoPoints();
     }
 
-
-    this.#pointsList.forEach((point) => {
-      this.#renderPoint(point);
-    });
+    this.#renderNewPoint();
+    this.#renderAllPoints();
 
   };
+
+  #handlePointChange = (updatedPoint) => {
+    //console.log('handlePoint begin', updatedPoint);
+    this.#pointsList = updateItem(this.#pointsList, updatedPoint);
+    this.sourcedPointsList = updateItem(this.#sourcedPointsList, updatedPoint);
+    this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
+    //console.log('handlePoint end', updatedPoint);
+  };
+
+  #sortPoints = (sortType) => {
+    switch (sortType) {
+      case SortType.DAY:
+        this.#pointsList.sort(sortByDay);
+        break;
+      case SortType.TIME:
+        this.#pointsList.sort(sortByTime);
+        break;
+      case SortType.PRICE:
+        this.#pointsList.sort(sortByPrice);
+        break;
+      default:
+        this.#pointsList = [...this.#sourcedPointsList];
+    }
+
+    this.#currentSortType = sortType;
+
+  };
+
+  #handleSortChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+    this.#sortPoints(sortType);
+    this.#clearPointsList();
+    this.#renderAllPoints();
+  };
+
 }
 
