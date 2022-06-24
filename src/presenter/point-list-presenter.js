@@ -38,7 +38,7 @@ export default class PointListPresenter {
     this.#pointPresenter.set(point.id, pointPresenter);
   };
 
-  #clearTaskList = () => {
+  #clearPointsList = () => {
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
     this.#pointPresenter.clear();
   };
@@ -125,6 +125,8 @@ export default class PointListPresenter {
       return;
     }
     this.#sortPoints(sortType);
+    this.#clearPointsList();
+    this.#renderAllPoints();
   };
 
 }
