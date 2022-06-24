@@ -106,10 +106,11 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    console.log('before', this.#point.is_favorite);
+    //console.log('before', this.#point.is_favorite);
     // eslint-disable-next-line camelcase
-    this.#changeData({...this.#point, is_favorite: !this.#point.isFavorite});
-    console.log('after', this.#point.is_favorite);
+    this.#point.is_favorite = !this.#point.is_favorite;
+    this.#changeData({...this.#point});
+    //console.log('after', this.#point.is_favorite);
     //console.log('favclick');
   };
 

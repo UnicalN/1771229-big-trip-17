@@ -80,8 +80,10 @@ export default class PointListPresenter {
   };
 
   #handlePointChange = (updatedPoint) => {
+    //console.log('handlePoint begin', updatedPoint);
     this.#pointsList = updateItem(this.#pointsList, updatedPoint);
     this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
+    //console.log('handlePoint end', updatedPoint);
   };
 
   #handleModeChange = () => {
