@@ -1,13 +1,14 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {typesMap} from '../mock/types-map.js';
 import { getTimeFromIso, getEditableDateFromIso } from '../dayjs-custom.js';
 // add type in call
 const createOfferListItem = (offer, type, isChecked) => {
-  const {title, price} = offer;
+  console.log (offer);
+  const {id, title, price} = offer;
   return `
         <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-1" type="checkbox" name="event-offer-${type}" ${isChecked ? 'checked' : ''}>
-          <label class="event__offer-label" for="event-offer-${type}-1">
+          <input class="event__offer-checkbox  visually-hidden" id="${id}" type="checkbox" name="event-offer-${type}" ${isChecked ? 'checked' : ''}>
+          <label class="event__offer-label" for="${id}">
             <span class="event__offer-title">${title}</span>
             &plus;&euro;&nbsp;
             <span class="event__offer-price">${price}</span>
@@ -15,7 +16,6 @@ const createOfferListItem = (offer, type, isChecked) => {
         </div>
      `;
 };
-
 
 const createTypeOptionsList =(typesArray) => {
   let optionsList = '';
@@ -53,11 +53,11 @@ const getOffersOfType = (offersByType, pointType) => {
   }
 };
 //-----------------------------------------------------------------------Main function--------------------------------------------------------------------------------
-const createEditPointTemplate = (point, offersByType) => {
+const createEditPointTemplate = (pointData, offersByType) => {
 
   // eslint-disable-next-line no-unused-vars
   //console.log('entry createEditPointTemplate', point, offersByType);
-  const {base_price: basePrice, date_from: dateFrom, date_to: dateTo, destination, offers, type} = point;
+  const {base_price: basePrice, date_from: dateFrom, date_to: dateTo, destination, offers, type} = pointData;
   const offersOfType = getOffersOfType(offersByType, type);
 
   //console.log(destination);
@@ -140,20 +140,29 @@ const createEditPointTemplate = (point, offersByType) => {
 `);
 };
 
-export default class EditPointView extends AbstractView {
-  #point = null;
+const NEW_POINT = {};
+
+export default class EditPointView extends AbstractStatefulView {
+
   #offers = null;
-  constructor(point, offers){
+  constructor(point = NEW_POINT, offers){
     super();
-    this.#point = point;
+    this._state = EditPointView.parse(point);
     this.#offers = offers;
+    this.#setInnerHandlers();
   }
 
   get template() {
     //console.log('get template 153', this.#point, this.#offers);
-    return createEditPointTemplate(this.#point, this.#offers);
+    return createEditPointTemplate(this._state, this.#offers);
   }
 
+  _restoreHandlers = () => {
+    //this.#setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
+  };
+
+  #setInnerHandlers =() => {}; //
   setRollupButtonClickHandler = (callback) =>{
     this._callback.click = callback;
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#rollupButtonClickHandler);
@@ -175,14 +184,29 @@ export default class EditPointView extends AbstractView {
   };
 
 
-  #formSubmitHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.formSubmit(this.#point);
-  };
-
   #formResetHandler = (evt) => {
     evt.preventDefault();
     this._callback.formSubmit();
   };
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    //this._callback.formSubmit(this.#point);
+    // ----------------------------------STATEFUL-------------------------------------
+    this._callback.formSubmit(EditPointView.parse(this._state));
+    this.element.querySelector('.card__text')
+      .addEventListener('input', this.#dateFromInputHandler);
+  };
+
+  #dateFromInputHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({
+      // eslint-disable-next-line camelcase
+      date_From: evt.target.value,
+    });
+  };
+
+  static parse = (parced) => ({...parced});
+
 }
 //
