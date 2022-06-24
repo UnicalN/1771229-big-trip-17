@@ -9,8 +9,6 @@ export const getDurationFromIso = (start, finish) => {
     hours:    (dayjs(finish).diff(dayjs(start), 'h')) % 24,
     days:     (dayjs(finish).diff(dayjs(start), 'd'))
   };
-  console.log(duration.hours)
-
   let humanizedDuration = `${duration.minutes}M`;
   if (duration.minutes < 10){humanizedDuration = `0${humanizedDuration}`;}
 
