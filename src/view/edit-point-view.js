@@ -185,3 +185,4 @@ export default class EditPointView extends AbstractView {
     this._callback.formSubmit();
   };
 }
+//
