@@ -23,6 +23,11 @@ export default class PointListPresenter {
   //#destinationsModel = new DestinationsModel();
   #pointPresenter = new Map();
 
+  #handleModeChange = () => {
+    console.log('handleModeChange');
+    this.#pointPresenter.forEach((presenter) => presenter.resetView());
+  };
+
   #renderPoint = (point) => {
 
     const pointPresenter = new PointPresenter(this.#pointListComponent.element, this.#handlePointChange, this.#handleModeChange);
@@ -80,12 +85,10 @@ export default class PointListPresenter {
   };
 
   #handlePointChange = (updatedPoint) => {
+    //console.log('handlePoint begin', updatedPoint);
     this.#pointsList = updateItem(this.#pointsList, updatedPoint);
     this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
-  };
-
-  #handleModeChange = () => {
-    this.#pointPresenter.forEach((presenter) => presenter.resetView());
+    //console.log('handlePoint end', updatedPoint);
   };
 
 }
