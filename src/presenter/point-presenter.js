@@ -77,6 +77,7 @@ export default class PointPresenter {
   };
 
   #replaceStandardWithEdit = () => {
+    this.#changeMode();
     //console.log('replace 81', this.#editPointComponent, this.#pointComponent);
     replace(this.#editPointComponent, this.#pointComponent);
     // eslint-disable-next-line no-use-before-define

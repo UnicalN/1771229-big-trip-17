@@ -9,6 +9,8 @@ import NoPointsView from '../view/no-points-view.js';
 //import DestinationsModel from '../model/destinations-model.js';
 import PointPresenter from './point-presenter.js';
 import { updateItem } from '../update-item.js';
+import {SortType} from '../const.js';
+import { sortByDay, sortByPrice, sortByTime } from '../dayjs-custom.js';
 
 export default class PointListPresenter {
 
@@ -22,9 +24,9 @@ export default class PointListPresenter {
   //#offersModel = new OffersModel();
   //#destinationsModel = new DestinationsModel();
   #pointPresenter = new Map();
-
+  #sortComponent = new SortView();
   #handleModeChange = () => {
-    console.log('handleModeChange');
+    //console.log('handleModeChange');
     this.#pointPresenter.forEach((presenter) => presenter.resetView());
   };
 
@@ -36,13 +38,14 @@ export default class PointListPresenter {
     this.#pointPresenter.set(point.id, pointPresenter);
   };
 
-  #clearTaskList = () => {
+  #clearPointsList = () => {
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
     this.#pointPresenter.clear();
   };
 
   #renderSort = () => {
-    render(new SortView(), this.#pointListContainer, RenderPosition.AFTERBEGIN);
+    render(this.#sortComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
+    this.#sortComponent.setSortChangeHandler(this.#handleSortChange);
   };
 
   #renderPointList = () => {
@@ -64,6 +67,9 @@ export default class PointListPresenter {
     });
   };
 
+  #currentSortType = SortType.DEFAULT;
+  #sourcedPointsList = [];
+
   init = (pointListContainer) => {
     this.#pointListContainer = pointListContainer;
     this.#pointsList = [...this.#pointsModel.points];
@@ -72,6 +78,9 @@ export default class PointListPresenter {
     //this.#destinations = [...this.#destinationsModel.destinations];
 
     this.#renderSort();
+
+    this.#sourcedPointsList = [...this.#pointsModel.points];
+
     this.#renderPointList();
 
 
@@ -87,8 +96,37 @@ export default class PointListPresenter {
   #handlePointChange = (updatedPoint) => {
     //console.log('handlePoint begin', updatedPoint);
     this.#pointsList = updateItem(this.#pointsList, updatedPoint);
+    this.sourcedPointsList = updateItem(this.#sourcedPointsList, updatedPoint);
     this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
     //console.log('handlePoint end', updatedPoint);
+  };
+
+  #sortPoints = (sortType) => {
+    switch (sortType) {
+      case SortType.DAY:
+        this.#pointsList.sort(sortByDay);
+        break;
+      case SortType.TIME:
+        this.#pointsList.sort(sortByTime);
+        break;
+      case SortType.PRICE:
+        this.#pointsList.sort(sortByPrice);
+        break;
+      default:
+        this.#pointsList = [...this.#sourcedPointsList];
+    }
+
+    this.#currentSortType = sortType;
+
+  };
+
+  #handleSortChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+    this.#sortPoints(sortType);
+    this.#clearPointsList();
+    this.#renderAllPoints();
   };
 
 }
