@@ -1,9 +1,10 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import {typesMap} from '../mock/types-map.js';
 import { getTimeFromIso, getEditableDateFromIso } from '../dayjs-custom.js';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 // add type in call
 const createOfferListItem = (offer, type, isChecked) => {
-  console.log (offer);
+  //console.log (offer);
   const {id, title, price} = offer;
   return `
         <div class="event__offer-selector">
@@ -17,21 +18,11 @@ const createOfferListItem = (offer, type, isChecked) => {
      `;
 };
 
-const createTypeOptionsList =(typesArray) => {
-  let optionsList = '';
-  for (const type of typesArray){
-    optionsList = `${optionsList}
-          <div class="event__type-item">
-            <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" >
-            <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type[0].toUpperCase()}${type.slice(1)}</label>
-          </div>`;
-  }
-  return optionsList;
-};
 
 const createOffersOfPointList = (offersOfType, offersOfPoint, type) => {
 
   let offersOfPointList ='';
+  console.log(offersOfType);
   for (const offerOfType of offersOfType) {
     let isChecked = false;
     for (const offerOfPoint of offersOfPoint) {
@@ -75,7 +66,50 @@ const createEditPointTemplate = (pointData, offersByType) => {
         <fieldset class="event__type-group">
           <legend class="visually-hidden">Event type</legend>
 
-          ${createTypeOptionsList(typesMap)}
+          <div class="event__type-item">
+                          <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
+                          <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
+                        </div>
+
+                        <div class="event__type-item">
+                          <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
+                          <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
+                        </div>
+
+                        <div class="event__type-item">
+                          <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
+                          <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
+                        </div>
+
+                        <div class="event__type-item">
+                          <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
+                          <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
+                        </div>
+
+                        <div class="event__type-item">
+                          <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
+                          <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
+                        </div>
+
+                        <div class="event__type-item">
+                          <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
+                          <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
+                        </div>
+
+                        <div class="event__type-item">
+                          <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
+                          <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
+                        </div>
+
+                        <div class="event__type-item">
+                          <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
+                          <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
+                        </div>
+
+                        <div class="event__type-item">
+                          <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
+                          <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
+                        </div>
 
 
         </fieldset>
@@ -158,11 +192,16 @@ export default class EditPointView extends AbstractStatefulView {
   }
 
   _restoreHandlers = () => {
-    //this.#setInnerHandlers();
+    this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
   };
 
-  #setInnerHandlers =() => {}; //
+  #setInnerHandlers =() => {
+    this.element.querySelector('#event-type-toggle-1')
+      .addEventListener('change', this.#typeChangeHandler);
+
+  };
+
   setRollupButtonClickHandler = (callback) =>{
     this._callback.click = callback;
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#rollupButtonClickHandler);
@@ -189,15 +228,30 @@ export default class EditPointView extends AbstractStatefulView {
     this._callback.formSubmit();
   };
 
+  #priceInputHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({
+      price: evt.target.value,
+    });
+  };
+
+  #typeChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.updateElement({
+      type : evt.target.value
+    }, this.#offers);
+  };
+
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
     //this._callback.formSubmit(this.#point);
     // ----------------------------------STATEFUL-------------------------------------
     this._callback.formSubmit(EditPointView.parse(this._state));
-    this.element.querySelector('.card__text')
-      .addEventListener('input', this.#dateFromInputHandler);
+    this.element.querySelector('#event-price-1')
+      .addEventListener('input', this.#priceInputHandler);
   };
 
+  /*
   #dateFromInputHandler = (evt) => {
     evt.preventDefault();
     this._setState({
@@ -205,7 +259,7 @@ export default class EditPointView extends AbstractStatefulView {
       date_From: evt.target.value,
     });
   };
-
+*/
   static parse = (parced) => ({...parced});
 
 }

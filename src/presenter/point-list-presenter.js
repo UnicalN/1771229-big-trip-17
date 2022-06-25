@@ -88,7 +88,7 @@ export default class PointListPresenter {
       this.#renderNoPoints();
     }
 
-    this.#renderNewPoint();
+    //this.#renderNewPoint();
     this.#renderAllPoints();
 
   };
