@@ -4,6 +4,13 @@ import { getTimeFromIso, getEditableDateFromIso } from '../dayjs-custom.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 // add type in call
+const getDestinationByName = (destinationsList, name) => {
+  for (const destination of destinationsList){
+    if (name === destination.name){
+      return destination;
+    }
+  }
+};
 const createOfferListItem = (offer, type, isChecked) => {
   //console.log (offer);
   const {id, title, price} = offer;
