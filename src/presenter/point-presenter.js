@@ -76,6 +76,7 @@ export default class PointPresenter {
 
   resetView = () => {
     if (this.#isInEditMode) {
+      this.#editPointComponent.reset(this.#point);
       this.#replaceEditWithStandard();
     }
 
@@ -98,7 +99,7 @@ export default class PointPresenter {
   #onEscKeyDown =  (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      this.#replaceEditWithStandard();
+      this.#editPointComponent.reset(this.#point);
       document.removeEventListener('keydown', this.#onEscKeyDown);
     }
   };
@@ -129,6 +130,11 @@ export default class PointPresenter {
     this.#replaceEditWithStandard();
   };
 
+  reset = (point) => {
+    this.updateElement(
+      EditPointView.parse(point),
+    );
+  };
   //  добавление listener'ов
 
   /*
