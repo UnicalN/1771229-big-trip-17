@@ -1,3 +1,4 @@
+import {typesMap} from '../mock/types-map.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { getTimeFromIso, getEditableDateFromIso } from '../dayjs-custom.js';
 import flatpickr from 'flatpickr';
@@ -18,11 +19,22 @@ const createOfferListItem = (offer, type, isChecked) => {
      `;
 };
 
+const createTypeOptionsList =(typesArray, chosenType) => {
+  let optionsList = '';
+  for (const type of typesArray){
+    optionsList = `${optionsList}
+          <div class="event__type-item">
+            <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${type === chosenType ? 'checked' : ''} >
+            <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type[0].toUpperCase()}${type.slice(1)}</label>
+          </div>`;
+  }
+  return optionsList;
+};
 
 const createOffersOfPointList = (offersOfType, offersOfPoint, type) => {
 
   let offersOfPointList ='';
-  console.log(offersOfType);
+  //console.log(offersOfType);
   for (const offerOfType of offersOfType) {
     let isChecked = false;
     for (const offerOfPoint of offersOfPoint) {
@@ -33,6 +45,7 @@ const createOffersOfPointList = (offersOfType, offersOfPoint, type) => {
     }
     offersOfPointList = `${offersOfPointList}${createOfferListItem(offerOfType, type, isChecked)}`;
   }
+  //console.log(offersOfPointList);
   return offersOfPointList;
 };
 
@@ -50,6 +63,8 @@ const createEditPointTemplate = (pointData, offersByType) => {
   //console.log('entry createEditPointTemplate', point, offersByType);
   const {base_price: basePrice, date_from: dateFrom, date_to: dateTo, destination, offers, type} = pointData;
   const offersOfType = getOffersOfType(offersByType, type);
+  //console.log (offersOfType, offers, type);
+  const offersOfPointList = createOffersOfPointList(offersOfType, offers, type);
 
   //console.log(destination);
   return (`<li class="trip-events__item">
@@ -66,50 +81,7 @@ const createEditPointTemplate = (pointData, offersByType) => {
         <fieldset class="event__type-group">
           <legend class="visually-hidden">Event type</legend>
 
-          <div class="event__type-item">
-                          <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-                          <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-                          <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-                          <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-                          <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-                          <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-                          <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-                          <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-                          <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-                          <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-                        </div>
+          ${createTypeOptionsList(typesMap, type)}
 
 
         </fieldset>
@@ -158,7 +130,7 @@ const createEditPointTemplate = (pointData, offersByType) => {
 
 
 
-        ${createOffersOfPointList(offersOfType, offers, type)}
+        ${offersOfPointList}
 
 
 
@@ -197,7 +169,7 @@ export default class EditPointView extends AbstractStatefulView {
   };
 
   #setInnerHandlers =() => {
-    this.element.querySelector('#event-type-toggle-1')
+    this.element.querySelector('.event__type-input')
       .addEventListener('change', this.#typeChangeHandler);
 
   };
@@ -237,9 +209,10 @@ export default class EditPointView extends AbstractStatefulView {
 
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
+    console.log(evt.target.value);
     this.updateElement({
       type : evt.target.value
-    }, this.#offers);
+    });
   };
 
   #formSubmitHandler = (evt) => {
