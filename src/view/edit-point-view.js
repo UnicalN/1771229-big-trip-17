@@ -18,7 +18,15 @@ const createOfferListItem = (offer, type, isChecked) => {
         </div>
      `;
 };
-
+const destinationOptions = (destinationsList) =>
+{
+  if (!destinationsList) {return '';}
+  let optionsList = '';
+  for (const destination of destinationsList){
+    optionsList = `${optionsList}<option value="${destination.name}">${destination.name}</option>}`;
+  }
+  return optionsList;
+};
 const createTypeOptionsList =(typesArray, chosenType) => {
   let optionsList = '';
   for (const type of typesArray){
@@ -57,7 +65,7 @@ const getOffersOfType = (offersByType, pointType) => {
   }
 };
 //-----------------------------------------------------------------------Main function--------------------------------------------------------------------------------
-const createEditPointTemplate = (pointData, offersByType) => {
+const createEditPointTemplate = (pointData, offersByType, destinationsList) => {
 
   // eslint-disable-next-line no-unused-vars
   //console.log('entry createEditPointTemplate', point, offersByType);
@@ -94,9 +102,8 @@ const createEditPointTemplate = (pointData, offersByType) => {
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
       <datalist id="destination-list-1">
-        <option value="Amsterdam"></option>
-        <option value="Geneva"></option>
-        <option value="Chamonix"></option>
+        ${destinationOptions(destinationsList)}
+
       </datalist>
     </div>
 
@@ -113,7 +120,7 @@ const createEditPointTemplate = (pointData, offersByType) => {
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" min="1" value="${basePrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -151,16 +158,18 @@ const NEW_POINT = {};
 export default class EditPointView extends AbstractStatefulView {
 
   #offers = null;
-  constructor(point = NEW_POINT, offers){
+  #destinations = null;
+  constructor(point = NEW_POINT, offers, destinations){
     super();
     this._state = EditPointView.parse(point);
     this.#offers = offers;
+    this.#destinations = destinations;
     this.#setInnerHandlers();
   }
 
   get template() {
     //console.log('get template 153', this.#point, this.#offers);
-    return createEditPointTemplate(this._state, this.#offers);
+    return createEditPointTemplate(this._state, this.#offers, this.#destinations);
   }
 
   _restoreHandlers = () => {
@@ -209,7 +218,7 @@ export default class EditPointView extends AbstractStatefulView {
 
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
-    console.log(evt.target.value);
+    //console.log(evt.target.value);
     this.updateElement({
       type : evt.target.value
     });
