@@ -87,7 +87,6 @@ export default class PointListPresenter {
     if (this.#pointsList.length === 0) {
       this.#renderNoPoints();
     }
-
     //this.#renderNewPoint();
     this.#renderAllPoints();
 

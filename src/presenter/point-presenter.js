@@ -43,7 +43,7 @@ export default class PointPresenter {
     this.#pointComponent.setRollupButtonClickHandler(this.#handleRollupButtonClickStandard);
     this.#editPointComponent.setRollupButtonClickHandler(this.#handleRollupButtonClickEdit);
     this.#editPointComponent.setFormSubmitHandler(this.#handleFormSubmit);
-    this.#editPointComponent.setFormResetHandler(this.#handleFormReset);
+    //this.#editPointComponent.setFormResetHandler(this.#handleFormReset);
     this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
 
 
