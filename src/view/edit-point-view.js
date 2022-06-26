@@ -207,6 +207,8 @@ export default class EditPointView extends AbstractStatefulView {
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
     this._callback.formSubmit(EditPointView.parseStateToPoint(this._state, this.#offers, this.#destinations));
+    this.element.querySelector('.event__input--price' )
+      .addEventListener('input', this.#priceInputHandler);
   };
 
   setRollupButtonClickHandler = (callback) =>{
