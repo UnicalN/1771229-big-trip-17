@@ -30,7 +30,7 @@ export default class PointListPresenter {
   get points() {
     switch (this.#currentSortType) {
       case SortType.DAY:
-         return [...this.#pointsModel.tasks].sort(sortByDay);
+        return [...this.#pointsModel.tasks].sort(sortByDay);
       case SortType.TIME:
         return [...this.#pointsModel.tasks].sort(sortByTime);
       case SortType.PRICE:
@@ -75,8 +75,8 @@ export default class PointListPresenter {
     render(new NoPointsView(), this.#pointListComponent.element);
   };
 
-  #renderAllPoints = () => {
-    this.#pointsList.forEach((point) => {
+  #renderAllPoints = (points) => {
+    points.forEach((point) => {
       //console.log ('point list presenter 58',point);
       this.#renderPoint(point);
     });
@@ -99,12 +99,14 @@ export default class PointListPresenter {
     this.#renderPointList();
 
 
-    if (this.#pointsList.length === 0) {
+  };
+
+  #renderList = () => {
+    if ([...this.#pointsModel.tasks].length === 0) {
       this.#renderNoPoints();
     }
     //this.#renderNewPoint();
     this.#renderAllPoints();
-
   };
 
   #handlePointChange = (updatedPoint) => {
@@ -115,7 +117,7 @@ export default class PointListPresenter {
     //console.log('handlePoint end', updatedPoint);
   };
 
-  #sortPoints = (sortType) => {
+  /* #sortPoints = (sortType) => {
     switch (sortType) {
       case SortType.DAY:
         this.#pointsList.sort(sortByDay);
@@ -132,13 +134,13 @@ export default class PointListPresenter {
 
     this.#currentSortType = sortType;
 
-  };
+  }; */
 
   #handleSortChange = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
-    this.#sortPoints(sortType);
+    this.#currentSortType = (sortType);
     this.#clearPointsList();
     this.#renderAllPoints();
   };
