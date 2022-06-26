@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {typesMap} from '../mock/types-map.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { getTimeFromIso, getEditableDateFromIso } from '../dayjs-custom.js';
@@ -282,14 +283,16 @@ export default class EditPointView extends AbstractStatefulView {
   };
 
   #dateFromChangeHandler = (date) => {
+    const dateClass = new Date(date);
     this.updateElement({
-      date_from: date,
+      date_from: dateClass.toISOString(),
     });
   };
 
   #dateToChangeHandler = (date) => {
+    const dateClass = new Date(date);
     this.updateElement({
-      date_to: date,
+      date_to: dateClass.toISOString(),
     });
   };
 
