@@ -315,7 +315,6 @@ export default class EditPointView extends AbstractStatefulView {
 
   #setDatepickerTo = () => {
     if (this._state.date_to) {
-      console.log(this._state.date_from);
       this.#datepickerTo = flatpickr(
         this.element.querySelector('#event-end-time-1'),
         {
@@ -336,7 +335,6 @@ export default class EditPointView extends AbstractStatefulView {
 
   #priceInputHandler = (evt) => {
     evt.preventDefault();
-    console.log(evt.target.value);
     this._setState({
       base_price: evt.target.value,
     });
