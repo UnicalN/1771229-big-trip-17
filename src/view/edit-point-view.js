@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {typesMap} from '../mock/types-map.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { getTimeFromIso, getEditableDateFromIso } from '../dayjs-custom.js';
@@ -26,12 +27,12 @@ const createOfferListItem = (offer, type, isChecked) => {
         </div>
      `;
 };
-const destinationOptions = (destinationsList) =>
+const destinationOptions = (destinationsList, destinationOfPoint) =>
 {
   if (!destinationsList) {return '';}
   let optionsList = '';
   for (const destination of destinationsList){
-    optionsList = `${optionsList}<option value="${destination.name}">${destination.name}</option>}`;
+    optionsList = `${optionsList}<option value="${destination.name}" ${destinationOfPoint === destination.name ? 'selected' : ''}>${destination.name}</option>}`;
   }
   return optionsList;
 };
@@ -108,11 +109,9 @@ const createEditPointTemplate = (pointData, offersByType, destinationsList) => {
       <label class="event__label  event__type-output" for="event-destination-1">
         ${type}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
-      <datalist id="destination-list-1">
-        ${destinationOptions(destinationsList)}
-
-      </datalist>
+      <select class="event__input  event__input--destination" id="event-destination-1" name="event-destination" value="${destination.name}">
+        ${destinationOptions(destinationsList, destination.name)}
+        </select>
     </div>
 
     <div class="event__field-group  event__field-group--time">
@@ -260,6 +259,8 @@ export default class EditPointView extends AbstractStatefulView {
       .addEventListener('input', this.#typeInputHandler);
     this.element.querySelector('.event__available-offers')
       .addEventListener('change', this.#offerChangeHandler);
+    this.element.querySelector('.event__input--price' )
+      .addEventListener('input', this.#priceInputHandler);
   };
 
   static parsePointToState = (point) => ({...point
@@ -284,14 +285,16 @@ export default class EditPointView extends AbstractStatefulView {
   };
 
   #dateFromChangeHandler = (date) => {
+    const dateClass = new Date(date);
     this.updateElement({
-      date_from: date,
+      date_from: dateClass.toISOString(),
     });
   };
 
   #dateToChangeHandler = (date) => {
+    const dateClass = new Date(date);
     this.updateElement({
-      date_to: date,
+      date_to: dateClass.toISOString(),
     });
   };
 
@@ -312,7 +315,6 @@ export default class EditPointView extends AbstractStatefulView {
 
   #setDatepickerTo = () => {
     if (this._state.date_to) {
-      console.log(this._state.date_from);
       this.#datepickerTo = flatpickr(
         this.element.querySelector('#event-end-time-1'),
         {
@@ -333,7 +335,6 @@ export default class EditPointView extends AbstractStatefulView {
 
   #priceInputHandler = (evt) => {
     evt.preventDefault();
-    console.log(evt.target.value);
     this._setState({
       base_price: evt.target.value,
     });
