@@ -5,6 +5,7 @@ import EditPointView from '../view/edit-point-view.js';
 
 import OffersModel from '../model/offers-model.js';
 
+import DestinationsModel from '../model/destinations-model.js';
 export default class PointPresenter {
   #pointListComponent = null;
   #pointComponent = null;
@@ -18,6 +19,8 @@ export default class PointPresenter {
   #changeMode = null;
   #isInEditMode = false;
 
+  #destinationsList = null;
+  #destinationsModel = new DestinationsModel();
 
   constructor(pointListComponent, changeData, changeMode){
     this.#pointListComponent = pointListComponent;
@@ -29,16 +32,18 @@ export default class PointPresenter {
   init = (point) => {
     this.#point = point;
     this.#offersList = [...this.#offersModel.offers];
+    this.#destinationsList = [...this.#destinationsModel.destinations];
 
     const prevPointComponent = this.#pointComponent;
     const prevEditPointComponent = this.#editPointComponent;
 
+
     this.#pointComponent = new PointView(point, this.#offersList);
-    this.#editPointComponent = new EditPointView(point, this.#offersList);
+    this.#editPointComponent = new EditPointView(point, this.#offersList, this.#destinationsList);
     this.#pointComponent.setRollupButtonClickHandler(this.#handleRollupButtonClickStandard);
     this.#editPointComponent.setRollupButtonClickHandler(this.#handleRollupButtonClickEdit);
     this.#editPointComponent.setFormSubmitHandler(this.#handleFormSubmit);
-    this.#editPointComponent.setFormResetHandler(this.#handleFormReset);
+    //this.#editPointComponent.setFormResetHandler(this.#handleFormReset);
     this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
 
 
@@ -71,6 +76,7 @@ export default class PointPresenter {
 
   resetView = () => {
     if (this.#isInEditMode) {
+      this.#editPointComponent.reset(this.#point);
       this.#replaceEditWithStandard();
     }
 
@@ -93,7 +99,7 @@ export default class PointPresenter {
   #onEscKeyDown =  (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      this.#replaceEditWithStandard();
+      this.#editPointComponent.reset(this.#point);
       document.removeEventListener('keydown', this.#onEscKeyDown);
     }
   };
@@ -124,6 +130,11 @@ export default class PointPresenter {
     this.#replaceEditWithStandard();
   };
 
+  reset = (point) => {
+    this.updateElement(
+      EditPointView.parse(point),
+    );
+  };
   //  добавление listener'ов
 
   /*
