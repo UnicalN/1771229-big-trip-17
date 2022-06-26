@@ -25,6 +25,13 @@ export default class PointListPresenter {
   //#destinationsModel = new DestinationsModel();
   #pointPresenter = new Map();
   #sortComponent = new SortView();
+
+
+  get points() {
+    return this.#pointsModel.points;
+  }
+
+
   #handleModeChange = () => {
     //console.log('handleModeChange');
     this.#pointPresenter.forEach((presenter) => presenter.resetView());
