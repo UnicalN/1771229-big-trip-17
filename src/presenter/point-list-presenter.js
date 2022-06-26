@@ -9,7 +9,7 @@ import NoPointsView from '../view/no-points-view.js';
 //import DestinationsModel from '../model/destinations-model.js';
 import PointPresenter from './point-presenter.js';
 //import { updateItem } from '../update-item.js';
-import {SortType} from '../const.js';
+import {SortType, UpdateType, UserAction} from '../const.js';
 import { sortByDay, sortByPrice, sortByTime } from '../dayjs-custom.js';
 
 export default class PointListPresenter {
@@ -122,18 +122,32 @@ export default class PointListPresenter {
 
   #handleViewAction = (actionType, updateType, update) => {
     console.log(actionType, updateType, update);
-    // Здесь будем вызывать обновление модели.
-    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-    // update - обновленные данные
+    switch (actionType) {
+      case UserAction.UPDATE:
+        this.#pointsModel.updatePoint(updateType, update);
+        break;
+      case UserAction.ADD:
+        this.#pointsModel.addPoint(updateType, update);
+        break;
+      case UserAction.DELETE:
+        this.#pointsModel.deletePoint(updateType, update);
+        break;
+    }
   };
 
   #handleModelEvent = (updateType, data) => {
-    console.log(updateType, data);
-    // В зависимости от типа изменений решаем, что делать:
-    // - обновить часть списка (например, когда поменялось описание)
-    // - обновить список (например, когда задача ушла в архив)
-    // - обновить всю доску (например, при переключении фильтра)
+    switch (updateType) {
+      case UpdateType.PATCH:
+        // - обновить часть списка (например, когда поменялось описание)
+        this.#pointPresenter.get(data.id).init(data);
+        break;
+      case UpdateType.MINOR:
+        // - обновить список (например, когда задача ушла в архив)
+        break;
+      case UpdateType.MAJOR:
+        // - обновить всю доску (например, при переключении фильтра)
+        break;
+    }
   };
 
   /* #sortPoints = (sortType) => {
