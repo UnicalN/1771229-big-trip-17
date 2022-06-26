@@ -8,7 +8,7 @@ import NoPointsView from '../view/no-points-view.js';
 //import OffersModel from '../model/offers-model.js';
 //import DestinationsModel from '../model/destinations-model.js';
 import PointPresenter from './point-presenter.js';
-import { updateItem } from '../update-item.js';
+//import { updateItem } from '../update-item.js';
 import {SortType} from '../const.js';
 import { sortByDay, sortByPrice, sortByTime } from '../dayjs-custom.js';
 
@@ -16,7 +16,7 @@ export default class PointListPresenter {
 
   #pointListComponent = new PointListView();
   #pointListContainer = null;
-  #pointsList= null;
+  //#pointsList= null;
   //#offersList= null;
   //#destinations = null;
 
@@ -28,6 +28,14 @@ export default class PointListPresenter {
 
 
   get points() {
+    switch (this.#currentSortType) {
+      case SortType.DAY:
+         return [...this.#pointsModel.tasks].sort(sortByDay);
+      case SortType.TIME:
+        return [...this.#pointsModel.tasks].sort(sortByTime);
+      case SortType.PRICE:
+        return [...this.#pointsModel.tasks].sort(sortByPrice);
+    }
     return this.#pointsModel.points;
   }
 
@@ -75,18 +83,18 @@ export default class PointListPresenter {
   };
 
   #currentSortType = SortType.DEFAULT;
-  #sourcedPointsList = [];
+  //#sourcedPointsList = [];
 
   init = (pointListContainer) => {
     this.#pointListContainer = pointListContainer;
-    this.#pointsList = [...this.#pointsModel.points];
+    //this.#pointsList = [...this.#pointsModel.points];
 
     //this.#offersList = [...this.#offersModel.offers];
     //this.#destinations = [...this.#destinationsModel.destinations];
 
     this.#renderSort();
 
-    this.#sourcedPointsList = [...this.#pointsModel.points];
+    //this.#sourcedPointsList = [...this.#pointsModel.points];
 
     this.#renderPointList();
 
@@ -101,8 +109,8 @@ export default class PointListPresenter {
 
   #handlePointChange = (updatedPoint) => {
     //console.log('handlePoint begin', updatedPoint);
-    this.#pointsList = updateItem(this.#pointsList, updatedPoint);
-    this.sourcedPointsList = updateItem(this.#sourcedPointsList, updatedPoint);
+    //this.#pointsList = updateItem(this.#pointsList, updatedPoint);
+    //this.sourcedPointsList = updateItem(this.#sourcedPointsList, updatedPoint);
     this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
     //console.log('handlePoint end', updatedPoint);
   };
