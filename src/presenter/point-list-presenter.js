@@ -106,12 +106,13 @@ export default class PointListPresenter {
   };
 
   #renderList = () => {
-    if ([...this.#pointsModel.tasks].length === 0) {
+    if ([...this.#pointsModel.points].length === 0) {
       this.#renderNoPoints();
       return;
     }
     //this.#renderNewPoint();
-    render(this.#pointListComponent, this.#pointListContainer.element);
+    console.log(this.#pointListComponent, this.#pointListContainer)
+    render(this.#pointListComponent, this.#pointListContainer);
   };
 
   #handlePointChange = (updatedPoint) => {
@@ -176,12 +177,13 @@ export default class PointListPresenter {
   }; */
 
   #handleSortChange = (sortType) => {
+    console.log(this.#currentSortType, sortType)
     if (this.#currentSortType === sortType) {
       return;
     }
     this.#currentSortType = (sortType);
     this.#clearPointsList({resetRenderedTaskCount: true});
-    this.#renderAllPoints();
+    this.#renderList();
   };
 
 }

@@ -50,6 +50,7 @@ export default class SortView extends AbstractView {
 
   #sortChangeHandler = (evt) => {
     evt.preventDefault();
+    console.log(evt.target.value)
     this._callback.sortChange(evt.target.value);
   };
 }

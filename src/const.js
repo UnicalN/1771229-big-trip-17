@@ -2,7 +2,7 @@ export const SortType = {
   DAY : 'day',
   TIME: 'time',
   PRICE: 'price',
-
+  DEFAULT : 'day',
 };
 
 export const UserAction = {
