@@ -24,7 +24,7 @@ export default class PointListPresenter {
   //#offersModel = new OffersModel();
   //#destinationsModel = new DestinationsModel();
   #pointPresenter = new Map();
-  #sortComponent = new SortView();
+  #sortComponent = null;
   constructor(){
     //!!
     this.#pointsModel.addObserver(this.#handleModelEvent);
@@ -62,8 +62,9 @@ export default class PointListPresenter {
   };
 
   #renderSort = () => {
-    render(this.#sortComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
+    this.#sortComponent = new SortView(this.#currentSortType);
     this.#sortComponent.setSortChangeHandler(this.#handleSortChange);
+    render(this.#sortComponent, this.#pointListComponent.element, RenderPosition.AFTERBEGIN);
   };
 
   #renderPointList = () => {
@@ -107,9 +108,10 @@ export default class PointListPresenter {
   #renderList = () => {
     if ([...this.#pointsModel.tasks].length === 0) {
       this.#renderNoPoints();
+      return;
     }
     //this.#renderNewPoint();
-    this.#renderAllPoints();
+    render(this.#pointListComponent, this.#pointListContainer.element);
   };
 
   #handlePointChange = (updatedPoint) => {
@@ -143,9 +145,13 @@ export default class PointListPresenter {
         break;
       case UpdateType.MINOR:
         // - обновить список (например, когда задача ушла в архив)
+        this.#clearPointsList();
+        this.#renderAllPoints(); //points list?______
         break;
       case UpdateType.MAJOR:
         // - обновить всю доску (например, при переключении фильтра)
+        this.#clearPointsList({resetRenderedTaskCount: true, resetSortType: true});
+        this.#renderAllPoints(); //points list?_____
         break;
     }
   };
@@ -174,7 +180,7 @@ export default class PointListPresenter {
       return;
     }
     this.#currentSortType = (sortType);
-    this.#clearPointsList();
+    this.#clearPointsList({resetRenderedTaskCount: true});
     this.#renderAllPoints();
   };
 
