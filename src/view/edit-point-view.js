@@ -259,6 +259,8 @@ export default class EditPointView extends AbstractStatefulView {
       .addEventListener('input', this.#typeInputHandler);
     this.element.querySelector('.event__available-offers')
       .addEventListener('change', this.#offerChangeHandler);
+    this.element.querySelector('.event__input--price' )
+      .addEventListener('input', this.#priceInputHandler);
   };
 
   static parsePointToState = (point) => ({...point
