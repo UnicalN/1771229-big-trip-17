@@ -221,7 +221,7 @@ export default class EditPointView extends AbstractStatefulView {
     this._callback.rollupClick();
   };
 
-  #typeChangeHandler = (evt) => {
+  #typeInputHandler = (evt) => {
     evt.preventDefault();
     this.updateElement({
       type : evt.target.value,
@@ -257,7 +257,7 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('.event__input--destination')
       .addEventListener('change', this.#destinationChangeHandler);
     this.element.querySelector('.event__type-group')
-      .addEventListener('input', this.#typeChangeHandler);
+      .addEventListener('input', this.#typeInputHandler);
     this.element.querySelector('.event__available-offers')
       .addEventListener('change', this.#offerChangeHandler);
   };
@@ -300,7 +300,7 @@ export default class EditPointView extends AbstractStatefulView {
       this.#datepickerFrom = flatpickr(
         this.element.querySelector('#event-start-time-1'),
         {
-          //maxDate: this._state.date_to,
+          maxDate: this._state.date_to,
           dateFormat: 'j/m/y H:i',
           enableTime: true,
           defaultDate: this._state.date_from,
@@ -312,10 +312,11 @@ export default class EditPointView extends AbstractStatefulView {
 
   #setDatepickerTo = () => {
     if (this._state.date_to) {
+      console.log(this._state.date_from);
       this.#datepickerTo = flatpickr(
         this.element.querySelector('#event-end-time-1'),
         {
-          //minDate: this._state.date_from,
+          minDate: this._state.date_from,
           dateFormat: 'j/m/y H:i',
           enableTime: true,
           defaultDate: this._state.date_to,
@@ -324,12 +325,6 @@ export default class EditPointView extends AbstractStatefulView {
       );
     }
   };
-  /*
-  setFormResetHandler = (callback) => {
-    this._callback.formSubmit = callback;
-    this.element.querySelector('form').addEventListener('reset', this.#formResetHandler);
-  };
-  */
 
   #formResetHandler = (evt) => {
     evt.preventDefault();
@@ -338,21 +333,13 @@ export default class EditPointView extends AbstractStatefulView {
 
   #priceInputHandler = (evt) => {
     evt.preventDefault();
+    console.log(evt.target.value);
     this._setState({
-      price: evt.target.value,
+      base_price: evt.target.value,
     });
   };
 
-  /*
-  #dateFromInputHandler = (evt) => {
-    evt.preventDefault();
-    this._setState({
-      // eslint-disable-next-line camelcase
-      date_From: evt.target.value,
-    });
-  };
-*/
   static parse = (parced) => ({...parced});
 
 }
-//
+
