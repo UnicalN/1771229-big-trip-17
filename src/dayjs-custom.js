@@ -4,7 +4,7 @@ export const getDateFromIso = (isoDate) => dayjs(isoDate).format('MMM DD');
 export const getEditableDateFromIso = (isoDate) => dayjs(isoDate).format('DD/MM/YY');
 
 export const getDurationFromIso = (start, finish) => {
-  if ((dayjs(finish).diff(dayjs(start), 'm')) < 0){return 'Finish date is before start!';}
+  if ((dayjs(finish).diff(dayjs(start), 'm')) < 0){throw 'Finish date is before start!';}
   const duration = {
     minutes:  (dayjs(finish).diff(dayjs(start), 'm')) % 60 + 1 ,
     hours:    (dayjs(finish).diff(dayjs(start), 'h')) % 24,
