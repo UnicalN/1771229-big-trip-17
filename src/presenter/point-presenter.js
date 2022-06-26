@@ -1,4 +1,4 @@
-
+import {UserAction, UpdateType} from '../const.js';
 import {render, replace, remove} from '../framework/render.js';
 import PointView from '../view/point-view.js';
 import EditPointView from '../view/edit-point-view.js';
@@ -115,14 +115,24 @@ export default class PointPresenter {
   #handleFavoriteClick = () => {
     //console.log('before', this.#point.is_favorite);
     // eslint-disable-next-line camelcase
-    this.#point.is_favorite = !this.#point.is_favorite;
-    this.#changeData({...this.#point});
+    //this.#point.is_favorite = !this.#point.is_favorite;
+    //this.#changeData({...this.#point});
     //console.log('after', this.#point.is_favorite);
     //console.log('favclick');
+
+    this.#changeData(
+      UserAction.UPDATE,
+      UpdateType.MINOR,
+      {...this.#point, isFavorite: !this.#point.isFavorite},
+    );
   };
 
   #handleFormSubmit = (point) => {
-    this.#changeData(point);
+    this.#changeData(
+      UserAction.UPDATE_TASK,
+      UpdateType.MINOR,
+      point,
+    );
     this.#replaceEditWithStandard();
   };
 

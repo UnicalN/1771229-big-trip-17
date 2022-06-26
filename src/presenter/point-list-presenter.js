@@ -25,7 +25,10 @@ export default class PointListPresenter {
   //#destinationsModel = new DestinationsModel();
   #pointPresenter = new Map();
   #sortComponent = new SortView();
-
+  constructor(){
+    //!!
+    this.#pointsModel.addObserver(this.#handleModelEvent);
+  }
 
   get points() {
     switch (this.#currentSortType) {
@@ -47,7 +50,7 @@ export default class PointListPresenter {
 
   #renderPoint = (point) => {
 
-    const pointPresenter = new PointPresenter(this.#pointListComponent.element, this.#handlePointChange, this.#handleModeChange);
+    const pointPresenter = new PointPresenter(this.#pointListComponent.element, this.#handleViewAction, this.#handleModeChange);
     //console.log ('point list presenter 30', point);
     pointPresenter.init(point);
     this.#pointPresenter.set(point.id, pointPresenter);
@@ -113,8 +116,24 @@ export default class PointListPresenter {
     //console.log('handlePoint begin', updatedPoint);
     //this.#pointsList = updateItem(this.#pointsList, updatedPoint);
     //this.sourcedPointsList = updateItem(this.#sourcedPointsList, updatedPoint);
-    this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
+    //this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
     //console.log('handlePoint end', updatedPoint);
+  };
+
+  #handleViewAction = (actionType, updateType, update) => {
+    console.log(actionType, updateType, update);
+    // Здесь будем вызывать обновление модели.
+    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+    // update - обновленные данные
+  };
+
+  #handleModelEvent = (updateType, data) => {
+    console.log(updateType, data);
+    // В зависимости от типа изменений решаем, что делать:
+    // - обновить часть списка (например, когда поменялось описание)
+    // - обновить список (например, когда задача ушла в архив)
+    // - обновить всю доску (например, при переключении фильтра)
   };
 
   /* #sortPoints = (sortType) => {
