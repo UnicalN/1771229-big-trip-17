@@ -10,6 +10,7 @@ const getDestinationByName = (destinationsList, name) => {
       return destination;
     }
   }
+  return null;
 };
 const createOfferListItem = (offer, type, isChecked) => {
   //console.log (offer);
@@ -164,7 +165,8 @@ const NEW_POINT = {};
 
 export default class EditPointView extends AbstractStatefulView {
 
-  #datepicker = null;
+  #datepickerFrom = null;
+  #datepickerTo = null;
   #offers = null;                                                       //offer, destination
   #destinations = null;
   constructor(point = NEW_POINT, offers, destinations){
@@ -263,19 +265,21 @@ export default class EditPointView extends AbstractStatefulView {
 
   static parseStateToPoint = (state) => {
     const editForm = {...state};
-    //delete editForm.newDestinationPoint;
     return editForm;
   };
 
   removeElement = () => {
     super.removeElement();
 
-    if (this.#datepicker) {
-      this.#datepicker.destroy();
-      this.#datepicker = null;
+    if (this.#datepickerFrom) {
+      this.#datepickerFrom.destroy();
+      this.#datepickerFrom = null;
+    }
+    if (this.#datepickerTo) {
+      this.#datepickerTo.destroy();
+      this.#datepickerTo = null;
     }
   };
-  //--------------------------------------------------------------------------------------------ctrl
 
   #dateFromChangeHandler = (date) => {
     this.updateElement({
@@ -291,10 +295,10 @@ export default class EditPointView extends AbstractStatefulView {
 
   #setDatepickerFrom = () => {
     if (this._state.date_from) {
-      this.#datepicker = flatpickr(
+      this.#datepickerFrom = flatpickr(
         this.element.querySelector('#event-start-time-1'),
         {
-          minDate: this._state.date_to,
+          //maxDate: this._state.date_to,
           dateFormat: 'j/m/y H:i',
           enableTime: true,
           defaultDate: this._state.date_from,
@@ -306,10 +310,10 @@ export default class EditPointView extends AbstractStatefulView {
 
   #setDatepickerTo = () => {
     if (this._state.date_to) {
-      this.#datepicker = flatpickr(
-        this.element.querySelector('#event-start-time-1'),
+      this.#datepickerTo = flatpickr(
+        this.element.querySelector('#event-end-time-1'),
         {
-          minDate: this._state.date_to,
+          //minDate: this._state.date_from,
           dateFormat: 'j/m/y H:i',
           enableTime: true,
           defaultDate: this._state.date_to,
