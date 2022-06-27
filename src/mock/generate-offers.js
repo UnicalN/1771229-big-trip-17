@@ -6,22 +6,22 @@ const offers =
         'offers': [
           {
             'id': 1,
-            'title': 'Upgrade to a business class',
+            'title': 'Offer 1',
             'price': 123
           },
           {
             'id': 2,
-            'title': 'Upgrade to a business class',
+            'title': 'Offer 2',
             'price': 120
           },
           {
             'id': 3,
-            'title': 'Upgrade to a business class',
+            'title': 'Offer 3',
             'price': 120
           },
           {
             'id': 4,
-            'title': 'Upgrade to a business class',
+            'title': 'Offer 4',
             'price': 123
           },
         ]
@@ -31,23 +31,23 @@ const offers =
         'type':'bus',
         'offers': [
           {
-            'id': 1,
-            'title': 'Upgrade to a business class',
+            'id': 5,
+            'title': 'Offer 5',
             'price': 123
           },
           {
-            'id': 2,
-            'title': 'Upgrade to a business class',
+            'id': 6,
+            'title': 'Offer 6',
             'price': 120
           },
           {
-            'id': 3,
-            'title': 'Upgrade to a business class',
+            'id': 7,
+            'title': 'Offer 7',
             'price': 120
           },
           {
-            'id': 4,
-            'title': 'Upgrade to a business class',
+            'id': 8,
+            'title': 'Offer 8',
             'price': 120
           },
         ]
@@ -57,23 +57,23 @@ const offers =
         'type': 'train',
         'offers': [
           {
-            'id': 1,
-            'title': 'Upgrade to a business class',
+            'id': 10,
+            'title': 'Offer 10',
             'price': 120
           },
           {
-            'id': 2,
-            'title': 'Upgrade to a business class',
+            'id': 20,
+            'title': 'Offer 20',
             'price': 120
           },
           {
-            'id': 3,
-            'title': 'Upgrade to a business class',
+            'id': 30,
+            'title': 'Offer 30',
             'price': 120
           },
           {
-            'id': 4,
-            'title': 'Upgrade to a business class',
+            'id': 40,
+            'title': 'Offer 40',
             'price': 120
           },
         ]
@@ -83,23 +83,23 @@ const offers =
         'type': 'ship',
         'offers': [
           {
-            'id': 1,
-            'title': 'Upgrade to a business class',
+            'id': 11,
+            'title': 'Offer 11',
             'price': 120
           },
           {
-            'id': 2,
-            'title': 'Upgrade to a business class',
+            'id': 21,
+            'title': 'Offer 21',
             'price': 120
           },
           {
-            'id': 3,
-            'title': 'Upgrade to a business class',
+            'id': 31,
+            'title': 'Offer 31',
             'price': 120
           },
           {
-            'id': 4,
-            'title': 'Upgrade to a business class',
+            'id': 41,
+            'title': 'Offer 41',
             'price': 120
           },
         ]
