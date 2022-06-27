@@ -7,7 +7,7 @@ import SortView from '../view/sort-view.js';
 import NoPointsView from '../view/no-points-view.js';
 
 import PointPresenter from './point-presenter.js';
-;
+
 import {SortType, UpdateType, UserAction} from '../const.js';
 import { sortByDay, sortByPrice, sortByTime } from '../dayjs-custom.js';
 
@@ -83,6 +83,7 @@ export default class PointListPresenter {
       this.#renderNoPoints();
       return;
     }
+    console.log('renderallpoints',points);
     points.forEach((point) => {
       this.#renderPoint(point);
     });
@@ -124,14 +125,17 @@ export default class PointListPresenter {
     switch (updateType) {
       case UpdateType.PATCH:
         // - обновить часть списка (например, когда поменялось описание)
+        console.log('PATCH');
         this.#pointPresenter.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
+        console.log('minor');
         // - обновить список (например, когда задача ушла в архив)
         this.#clearPointsList();
-        this.#renderAllPoints(data); //points list?______
+        this.#renderPoint(data); //points list?______
         break;
       case UpdateType.MAJOR:
+        console.log('major');
         // - обновить всю доску (например, при переключении фильтра)
         this.#clearPointsList({resetRenderedTaskCount: true, resetSortType: true});
         this.#renderAllPoints(data); //points list?_____

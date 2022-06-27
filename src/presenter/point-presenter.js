@@ -21,13 +21,13 @@ export default class PointPresenter {
 
   #destinationsList = null;
   #destinationsModel = new DestinationsModel();
-
   constructor(pointListComponent, changeData, changeMode){
     this.#pointListComponent = pointListComponent;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
-  }
+    console.log('point presenter', pointListComponent, changeData, changeMode);
 
+  }
 
   init = (point) => {
     this.#point = point;
@@ -113,24 +113,17 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    //console.log('before', this.#point.is_favorite);
-    // eslint-disable-next-line camelcase
-    //this.#point.is_favorite = !this.#point.is_favorite;
-    //this.#changeData({...this.#point});
-    //console.log('after', this.#point.is_favorite);
-    //console.log('favclick');
-
     this.#changeData(
       UserAction.UPDATE,
-      UpdateType.MINOR,
-      {...this.#point, isFavorite: !this.#point.isFavorite},
+      UpdateType.PATCH,
+      {...this.#point, is_favorite: !this.#point.is_favorite},
     );
   };
 
   #handleFormSubmit = (point) => {
     this.#changeData(
-      UserAction.UPDATE_TASK,
-      UpdateType.MINOR,
+      UserAction.UPDATE,
+      UpdateType.PATCH,
       point,
     );
     this.#replaceEditWithStandard();
