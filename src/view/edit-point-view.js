@@ -1,10 +1,8 @@
-/* eslint-disable camelcase */
 import {typesMap} from '../mock/types-map.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { getTimeFromIso, getEditableDateFromIso } from '../dayjs-custom.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-// add type in call
 const getDestinationByName = (destinationsList, name) => {
   for (const destination of destinationsList){
     if (name === destination.name){
@@ -14,7 +12,6 @@ const getDestinationByName = (destinationsList, name) => {
   return null;
 };
 const createOfferListItem = (offer, type, isChecked) => {
-  //console.log (offer);
   const {id, title, price} = offer;
   return `
         <div class="event__offer-selector">
@@ -287,6 +284,7 @@ export default class EditPointView extends AbstractStatefulView {
   #dateFromChangeHandler = (date) => {
     const dateClass = new Date(date);
     this.updateElement({
+      // eslint-disable-next-line camelcase
       date_from: dateClass.toISOString(),
     });
   };
@@ -294,6 +292,7 @@ export default class EditPointView extends AbstractStatefulView {
   #dateToChangeHandler = (date) => {
     const dateClass = new Date(date);
     this.updateElement({
+      // eslint-disable-next-line camelcase
       date_to: dateClass.toISOString(),
     });
   };
@@ -336,6 +335,7 @@ export default class EditPointView extends AbstractStatefulView {
   #priceInputHandler = (evt) => {
     evt.preventDefault();
     this._setState({
+      // eslint-disable-next-line camelcase
       base_price: evt.target.value,
     });
   };

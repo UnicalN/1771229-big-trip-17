@@ -43,7 +43,7 @@ export default class PointPresenter {
     this.#pointComponent.setRollupButtonClickHandler(this.#handleRollupButtonClickStandard);
     this.#editPointComponent.setRollupButtonClickHandler(this.#handleRollupButtonClickEdit);
     this.#editPointComponent.setFormSubmitHandler(this.#handleFormSubmit);
-    //this.#editPointComponent.setFormResetHandler(this.#handleFormReset);
+
     this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
 
 
@@ -52,14 +52,11 @@ export default class PointPresenter {
       render(this.#pointComponent, this.#pointListComponent);
       return;
     }
-    //console.log('point presenter 51', prevPointComponent.element)
     if (!this.#isInEditMode) {
-      //console.log('replace 53', this.#pointComponent, prevPointComponent);
       replace(this.#pointComponent, prevPointComponent);
     }
 
     if (this.#isInEditMode) {
-      //console.log('replace 58', this.#editPointComponent, prevEditPointComponent);
       replace(this.#editPointComponent, prevEditPointComponent);
     }
 
@@ -84,7 +81,6 @@ export default class PointPresenter {
 
   #replaceStandardWithEdit = () => {
     this.#changeMode();
-    //console.log('replace 81', this.#editPointComponent, this.#pointComponent);
     replace(this.#editPointComponent, this.#pointComponent);
     // eslint-disable-next-line no-use-before-define
     document.addEventListener('keydown', this.#onEscKeyDown);
@@ -113,12 +109,9 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    //console.log('before', this.#point.is_favorite);
     // eslint-disable-next-line camelcase
     this.#point.is_favorite = !this.#point.is_favorite;
     this.#changeData({...this.#point});
-    //console.log('after', this.#point.is_favorite);
-    //console.log('favclick');
   };
 
   #handleFormSubmit = (point) => {
@@ -135,25 +128,5 @@ export default class PointPresenter {
       EditPointView.parse(point),
     );
   };
-  //  добавление listener'ов
-
-  /*
-  #pointComponent.setRollupButtonClickHandler(() => {
-    replaceStandardWithEdit();
-  });
-
-  #editPointComponent.setRollupButtonClickHandler(() => {
-    replaceEditWithStandard();
-  });
-
-  editPointComponent.setFormSubmitHandler(() => {
-    replaceEditWithStandard();
-  });
-
-  editPointComponent.setFormResetHandler(() => {
-    replaceEditWithStandard();
-  });
-
-*/
 
 }
