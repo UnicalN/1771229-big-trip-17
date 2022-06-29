@@ -132,12 +132,12 @@ export default class PointListPresenter {
         console.log('minor');
         // - обновить список (например, когда задача ушла в архив)
         this.#clearPointsList();
-        this.#renderPoint(data); //points list?______
+        this.#renderAllPoints(data); //points list?______
         break;
       case UpdateType.MAJOR:
         console.log('major');
         // - обновить всю доску (например, при переключении фильтра)
-        this.#clearPointsList({resetRenderedTaskCount: true, resetSortType: true});
+        this.#clearPointsList({resetSortType: true});
         this.#renderAllPoints(data); //points list?_____
         break;
     }
