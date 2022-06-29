@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import PointsModel from '../model/points-model.js';
-import {render,  RenderPosition} from '../framework/render.js';
+import {render,  RenderPosition, remove} from '../framework/render.js';
 import NewPointView from '../view/new-point-view.js';
 import PointListView from '../view/point-list-view.js';
 import SortView from '../view/sort-view.js';
@@ -12,7 +12,7 @@ import {SortType, UpdateType, UserAction} from '../const.js';
 import { sortByDay, sortByPrice, sortByTime } from '../dayjs-custom.js';
 
 export default class PointListPresenter {
-
+  #noPointsComponent = new NoPointsView();
   #pointListComponent = new PointListView();
   #pointListContainer = null;
 
@@ -51,23 +51,40 @@ export default class PointListPresenter {
     this.#pointPresenter.set(point.id, pointPresenter);
   };
 
-  #clearPointsList = () => {
+  #clearPointsList = (resetSortType = false) => {
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
     this.#pointPresenter.clear();
+
+    remove(this.#sortComponent);
+    remove(this.#noPointsComponent);
+
+    if (resetSortType) {
+      this.#currentSortType = SortType.DEFAULT;
+    }
+    this.#renderSort();
   };
   //----------------------------------------------
 
   #renderSort = () => {
     this.#sortComponent = new SortView(this.#currentSortType);
-    this.#sortComponent.setSortChangeHandler(this.#handleSortChange);
-
     render(this.#sortComponent, this.#pointListComponent.element, RenderPosition.AFTERBEGIN);
+    this.#sortComponent.setSortChangeHandler(this.#handleSortChange);
   };
-
-  #renderPointList = () => {
-    console.log(this.#pointListComponent.element, this.#pointListContainer);
+  /*
+  #renderPointList = (points) => {
     render(this.#pointListComponent, this.#pointListContainer);
+
+    if (!points) {
+      this.#renderNoPoints();
+      return;
+    }
+
+    this.#renderSort();
+    render(this.#pointListComponent, this.#pointListContainer);
+
+    this.#renderAllPoints();
   };
+*/
   //----------------------------------------------------------------------
 
   #renderNewPoint = () => {
@@ -79,6 +96,7 @@ export default class PointListPresenter {
   };
 
   #renderAllPoints = (points) => {
+    render(this.#pointListComponent, this.#pointListContainer);
     if (!points) {
       this.#renderNoPoints();
       return;
@@ -94,11 +112,9 @@ export default class PointListPresenter {
   init = (pointListContainer) => {
     this.#pointListContainer = pointListContainer;
 
-    this.#renderSort();
-
-    this.#renderPointList();
+    //this.#renderPointList();
     this.#renderAllPoints(this.points);
-
+    this.#renderSort();
 
   };
 
@@ -149,7 +165,7 @@ export default class PointListPresenter {
       return;
     }
     this.#currentSortType = (sortType);
-    this.#clearPointsList({resetRenderedTaskCount: true});
+    this.#clearPointsList();
     this.#renderAllPoints(this.points);
   };
 

@@ -25,8 +25,6 @@ export default class PointPresenter {
     this.#pointListComponent = pointListComponent;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
-    console.log('point presenter', pointListComponent, changeData, changeMode);
-
   }
 
   init = (point) => {
