@@ -40,7 +40,8 @@ export default class SortView extends AbstractView {
   }
 
   get template() {
-    return createSortTemplate();
+    console.log('sort type', this.#currentSortType)
+    return createSortTemplate(this.#currentSortType);
   }
 
   setSortChangeHandler = (callback) => {
@@ -49,8 +50,8 @@ export default class SortView extends AbstractView {
   };
 
   #sortChangeHandler = (evt) => {
-    evt.preventDefault();
-    console.log(evt.target.value)
+    //evt.preventDefault();
+    console.log(evt.target.value);
     this._callback.sortChange(evt.target.value);
   };
 }
