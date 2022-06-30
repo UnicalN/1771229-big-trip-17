@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import AbstractView from '../framework/view/abstract-view.js';
 import {SortType} from '../const.js';
 
@@ -40,7 +41,7 @@ export default class SortView extends AbstractView {
   }
 
   get template() {
-    console.log('sort type', this.#currentSortType)
+    console.log('sort type', this.#currentSortType);
     return createSortTemplate(this.#currentSortType);
   }
 

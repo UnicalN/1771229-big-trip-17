@@ -124,7 +124,7 @@ const createEditPointTemplate = (pointData, offersByType, destinationsList) => {
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" min="1" value="${basePrice}">
+      <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" min="1" value="${basePrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -192,12 +192,23 @@ export default class EditPointView extends AbstractStatefulView {
     );
   };
 
+  setDeleteClickHandler = (callback) => {
+    this._callback.deleteClick = callback;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
+  };
+
   _restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setRollupButtonClickHandler(this._callback.rollupClick);
     this.#setDatepickerFrom();
     this.#setDatepickerTo();
+    this.setDeleteClickHandler(this._callback.deleteClick);
+  };
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.deleteClick(EditPointView.parseStateToPoint(this._state));
   };
 
   #formSubmitHandler = (evt) => {
@@ -340,7 +351,6 @@ export default class EditPointView extends AbstractStatefulView {
     });
   };
 
-  static parse = (parced) => ({...parced});
 
 }
 

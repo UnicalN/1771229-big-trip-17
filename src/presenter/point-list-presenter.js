@@ -97,12 +97,13 @@ export default class PointListPresenter {
 
   #renderAllPoints = (points) => {
     render(this.#pointListComponent, this.#pointListContainer);
+    console.log('render all points', points);
     if (!points) {
       this.#renderNoPoints();
       return;
     }
-    console.log('renderallpoints',points);
     points.forEach((point) => {
+      console.log('renderallpoints',point);
       this.#renderPoint(point);
     });
   };
