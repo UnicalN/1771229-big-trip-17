@@ -351,7 +351,6 @@ export default class EditPointView extends AbstractStatefulView {
     });
   };
 
-  static parse = (parced) => ({...parced});
 
 }
 
