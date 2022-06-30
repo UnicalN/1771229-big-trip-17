@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {UserAction, UpdateType} from '../const.js';
 import {render, replace, remove} from '../framework/render.js';
 import PointView from '../view/point-view.js';
@@ -41,8 +42,9 @@ export default class PointPresenter {
     this.#pointComponent.setRollupButtonClickHandler(this.#handleRollupButtonClickStandard);
     this.#editPointComponent.setRollupButtonClickHandler(this.#handleRollupButtonClickEdit);
     this.#editPointComponent.setFormSubmitHandler(this.#handleFormSubmit);
-
     this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+
+    this.#editPointComponent.setDeleteClickHandler(this.handleDeleteClick);
 
 
     //переиспользование
@@ -115,7 +117,7 @@ export default class PointPresenter {
     );
 
   };
-
+  /*
   #handleFormSubmit = (point) => {
     this.#changeData(
       UserAction.UPDATE,
@@ -124,6 +126,23 @@ export default class PointPresenter {
     );
     this.#replaceEditWithStandard();
   };
+    */
+
+
+  #handleFormSubmit = (update) => {
+    const isMinorUpdate =
+    (this.#point.date_from === update.date_from)&&
+    (this.#point.date_from === update.date_from)&&
+    (this.#point.base_price === update.base_price);
+
+    this.#changeData(
+      UserAction.UPDATE,
+      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      update,
+    );
+    this.#replaceEditWithStandard();
+  };
+
 
   #handleFormReset = () => {
     this.#replaceEditWithStandard();
@@ -135,4 +154,11 @@ export default class PointPresenter {
     );
   };
 
+  #handleDeleteClick = (point) => {
+    this.#changeData(
+      UserAction.DELETE,
+      UpdateType.MINOR,
+      point,
+    );
+  };
 }
